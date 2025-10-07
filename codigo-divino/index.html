@@ -7,23 +7,23 @@
   <meta name="description" content="Accede al Código Divino: activa tu poder interior, comprende la Biblia y transforma tu energía.">
   <link rel="preload" as="image" href="1.png">
 
-  <!-- Meta Pixel Code -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '704776715751233'); /* substitua se quiser usar outro pixel */
-  fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=704776715751233&ev=PageView&noscript=1"
-  /></noscript>
-  <!-- End Meta Pixel Code -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '779336198228035');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=779336198228035&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 
   <style>
     :root{
@@ -117,20 +117,5 @@
 
   </main>
 
-  <!-- Script de UTMs atualizado -->
-  <script>
-  (function () {
-    const DEFAULT_UTM = new URLSearchParams({utm_source:'facebook',utm_medium:'cpc',utm_campaign:'codigo_divino_latam'});
-    const incoming = new URLSearchParams(window.location.search);
-    for (const [k,v] of DEFAULT_UTM.entries()) { if (!incoming.has(k)) incoming.set(k,v); }
-    function isCheckout(href){try{const u=new URL(href,window.location.origin);return /(^|\.)estadodivino\.com$/i.test(u.hostname);}catch{return false;}}
-    function packSrc(urlObj){const existing=urlObj.searchParams.get('src')||'codigo_divino';const utmBlock=[incoming.get('utm_source')?'utm_source='+incoming.get('utm_source'):null,incoming.get('utm_medium')?'utm_medium='+incoming.get('utm_medium'):null,incoming.get('utm_campaign')?'utm_campaign='+incoming.get('utm_campaign'):null,incoming.get('utm_content')?'utm_content='+incoming.get('utm_content'):null,].filter(Boolean).join('|');const finalSrc=utmBlock?(existing.includes('utm_source=')||existing.includes('utm_medium=')||existing.includes('utm_campaign=')||existing.includes('utm_content='))?existing:`${existing}|${utmBlock}`:existing;urlObj.searchParams.set('src',finalSrc);}
-    function buildTarget(href){const u=new URL(href,window.location.origin);for(const [k,v] of incoming.entries()){if(!u.searchParams.has(k))u.searchParams.set(k,v);}packSrc(u);return u.toString();}
-    function patchAllAnchors(){document.querySelectorAll('a[href]').forEach(a=>{if(!isCheckout(a.href))return;a.href=buildTarget(a.href);});}
-    document.addEventListener('click',function(e){const a=e.target.closest('a');if(!a||!isCheckout(a.href))return;const target=buildTarget(a.href);if(a.href===target)return;e.preventDefault();e.stopImmediatePropagation();window.location.assign(target);},true);
-    document.addEventListener('DOMContentLoaded',patchAllAnchors);
-    new MutationObserver(patchAllAnchors).observe(document.documentElement,{childList:true,subtree:true});
-  })();
-  </script>
 </body>
 </html>
