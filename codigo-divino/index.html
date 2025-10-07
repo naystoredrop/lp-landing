@@ -119,7 +119,7 @@
     </section>
 
     <section id="s15">
-      <a class="offer" href="https://estadodivino.com/checkout/198808041?utm_source=facebook&utm_medium=paid_social&utm_campaign=codigo_divino&utm_content={{ad.name}}" target="_blank" rel="noopener nofollow">
+      <a class="offer" href="https://estadodivino.com/checkout/198808041?utm_source=facebook&utm_medium=paid_social&utm_campaign=codigo_divino&utm_content=ad_facebook" target="_blank" rel="noopener nofollow">
         <img src="15.gif" alt="Botón de compra Código Divino" loading="lazy">
       </a>
     </section>
@@ -129,14 +129,14 @@
 
   </main>
 
-  <!-- Script para passar UTM dinamicamente -->
+  <!-- Script UTM (apenas para links externos) -->
   <script>
   document.addEventListener("DOMContentLoaded", function() {
     const params = window.location.search;
-    const fallback = "?utm_source=facebook&utm_medium=paid_social&utm_campaign=codigo_divino&utm_content={{ad.name}}";
-    const allLinks = document.querySelectorAll(".cta a, .offer");
+    const fallback = "?utm_source=facebook&utm_medium=paid_social&utm_campaign=codigo_divino&utm_content=ad_facebook";
+    const buyLinks = document.querySelectorAll(".offer"); // apenas botões externos
 
-    allLinks.forEach(link => {
+    buyLinks.forEach(link => {
       if (params) {
         if (link.href.includes("?")) link.href += "&" + params.substring(1);
         else link.href += params;
