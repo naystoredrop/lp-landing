@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Código Divino — Comprende la Biblia y transforma tu vida</title>
+  <meta name="description" content="Accede al Código Divino: activa tu poder interior, comprende la Biblia y transforma tu energía.">
+  <link rel="preload" as="image" href="1.png">
 
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '704776715751233'); /* substitua se quiser usar outro pixel */
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=704776715751233&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <style>
+    :root{
+      --accent:#d4af37; /* dourado espiritual */
+      --accent-dark:#b8962d;
+      --text:#fff;
+      --bg:#000;
+      --maxw:1100px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0; padding:0; background:var(--bg); color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;}
+    img{display:block; width:100%; height:auto;}
+    main{max-width:var(--maxw); margin:0 auto;}
+    section{width:100%;}
+    .cta{display:flex; justify-content:center; margin:20px 0; padding:0 12px;}
+    .cta a{display:inline-block; text-decoration:none; font-weight:800; padding:18px 22px; border-radius:999px; background:var(--accent); color:#fff; box-shadow:0 6px 16px rgba(0,0,0,.35); transition:.2s transform, .2s background; text-align:center; width:100%; max-width:680px;}
+    .cta a:hover{background:var(--accent-dark); transform:translateY(-1px);}
+    .cta a:active{transform:translateY(0);}
+    .anchor{position:relative; top:-10px; visibility:hidden;}
+    .offer{display:block;}
+    img{-webkit-user-drag:none; user-select:none;}
+  </style>
+</head>
+<body>
+
+  <!-- ===== Barra Topo ===== -->
+  <div style="color:#fff; font-size:16px; text-align:center; background:#d4af37; padding:10px;">
+    Solo por hoy: <b><span id="datas"></span></b> paga solo <b>$9.97 USD</b>
+  </div>
+  <script>
+    function getDatas() {
+      var data = new Date();
+      var dias = [];
+      var mesActual = data.toLocaleString('es-ES', { month: 'long' });
+      for (var i = 2; i >= 0; i--) {
+        var nueva = new Date();
+        nueva.setDate(data.getDate() - i);
+        dias.push(nueva.getDate());
+      }
+      return dias.join(', ') + ' de ' + mesActual;
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+      var el = document.getElementById("datas");
+      if(el){ el.textContent = getDatas(); }
+    });
+  </script>
+  <!-- ===== /Barra Topo ===== -->
+
+  <main>
+
+    <!-- Seções + CTAs -->
+    <section id="s1"><img src="1.png" alt="Sección 1"></section>
+    <div class="cta"><a href="#s14">QUIERO COMPRENDER LA BIBLIA</a></div>
+
+    <section id="s2"><img src="2.png" alt="Sección 2"></section>
+    <div class="cta"><a href="#s14">SI, QUIERO</a></div>
+
+    <section id="s3"><img src="3.png" alt="Sección 3"></section>
+    <section id="s4"><img src="4.png" alt="Sección 4"></section>
+
+    <section id="s5"><img src="5.png" alt="Sección 5"></section>
+    <div class="cta"><a href="#s14">QUIERO COMPRENDER LA BIBLIA</a></div>
+
+    <section id="s6"><img src="6.png" alt="Sección 6"></section>
+    <section id="s7"><img src="7.png" alt="Sección 7"></section>
+    <section id="s8"><img src="8.png" alt="Sección 8"></section>
+    <div class="cta"><a href="#s14">SI, QUIERO APRENDER</a></div>
+
+    <section id="s9"><img src="9.png" alt="Sección 9"></section>
+    <section id="s10"><img src="10.png" alt="Sección 10"></section>
+    <section id="s11"><img src="11.png" alt="Sección 11"></section>
+    <div class="cta"><a href="#s14">QUIERO LOS BONOS</a></div>
+
+    <section id="s12"><img src="12.png" alt="Sección 12"></section>
+    <section id="s13"><img src="13.png" alt="Sección 13"></section>
+
+    <!-- 14 (oferta âncora) -->
+    <section id="s14">
+      <img src="14.png" alt="Oferta Código Divino">
+    </section>
+
+    <!-- 15 (checkout principal) -->
+    <section id="s15">
+      <a class="offer" href="https://estadodivino.com/ckt/2mPoEL" target="_blank" rel="noopener nofollow">
+        <img src="15.gif" alt="Comprar Código Divino">
+      </a>
+    </section>
+
+    <section id="s16"><img src="16.png" alt="Sección 16"></section>
+    <section id="s17"><img src="17.png" alt="Sección 17"></section>
+
+  </main>
+
+  <!-- Script de UTMs atualizado -->
+  <script>
+  (function () {
+    const DEFAULT_UTM = new URLSearchParams({utm_source:'facebook',utm_medium:'cpc',utm_campaign:'codigo_divino_latam'});
+    const incoming = new URLSearchParams(window.location.search);
+    for (const [k,v] of DEFAULT_UTM.entries()) { if (!incoming.has(k)) incoming.set(k,v); }
+    function isCheckout(href){try{const u=new URL(href,window.location.origin);return /(^|\.)estadodivino\.com$/i.test(u.hostname);}catch{return false;}}
+    function packSrc(urlObj){const existing=urlObj.searchParams.get('src')||'codigo_divino';const utmBlock=[incoming.get('utm_source')?'utm_source='+incoming.get('utm_source'):null,incoming.get('utm_medium')?'utm_medium='+incoming.get('utm_medium'):null,incoming.get('utm_campaign')?'utm_campaign='+incoming.get('utm_campaign'):null,incoming.get('utm_content')?'utm_content='+incoming.get('utm_content'):null,].filter(Boolean).join('|');const finalSrc=utmBlock?(existing.includes('utm_source=')||existing.includes('utm_medium=')||existing.includes('utm_campaign=')||existing.includes('utm_content='))?existing:`${existing}|${utmBlock}`:existing;urlObj.searchParams.set('src',finalSrc);}
+    function buildTarget(href){const u=new URL(href,window.location.origin);for(const [k,v] of incoming.entries()){if(!u.searchParams.has(k))u.searchParams.set(k,v);}packSrc(u);return u.toString();}
+    function patchAllAnchors(){document.querySelectorAll('a[href]').forEach(a=>{if(!isCheckout(a.href))return;a.href=buildTarget(a.href);});}
+    document.addEventListener('click',function(e){const a=e.target.closest('a');if(!a||!isCheckout(a.href))return;const target=buildTarget(a.href);if(a.href===target)return;e.preventDefault();e.stopImmediatePropagation();window.location.assign(target);},true);
+    document.addEventListener('DOMContentLoaded',patchAllAnchors);
+    new MutationObserver(patchAllAnchors).observe(document.documentElement,{childList:true,subtree:true});
+  })();
+  </script>
+</body>
+</html>
