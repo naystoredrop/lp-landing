@@ -117,20 +117,84 @@ src="https://www.facebook.com/tr?id=779336198228035&ev=PageView&noscript=1"
 
   </main>
 
-  <!-- Script de UTMs atualizado -->
-  <script>
-  (function () {
-    const DEFAULT_UTM = new URLSearchParams({utm_source:'facebook',utm_medium:'cpc',utm_campaign:'codigo_divino_latam'});
-    const incoming = new URLSearchParams(window.location.search);
-    for (const [k,v] of DEFAULT_UTM.entries()) { if (!incoming.has(k)) incoming.set(k,v); }
-    function isCheckout(href){try{const u=new URL(href,window.location.origin);return /(^|\.)estadodivino\.com$/i.test(u.hostname);}catch{return false;}}
-    function packSrc(urlObj){const existing=urlObj.searchParams.get('src')||'codigo_divino';const utmBlock=[incoming.get('utm_source')?'utm_source='+incoming.get('utm_source'):null,incoming.get('utm_medium')?'utm_medium='+incoming.get('utm_medium'):null,incoming.get('utm_campaign')?'utm_campaign='+incoming.get('utm_campaign'):null,incoming.get('utm_content')?'utm_content='+incoming.get('utm_content'):null,].filter(Boolean).join('|');const finalSrc=utmBlock?(existing.includes('utm_source=')||existing.includes('utm_medium=')||existing.includes('utm_campaign=')||existing.includes('utm_content='))?existing:`${existing}|${utmBlock}`:existing;urlObj.searchParams.set('src',finalSrc);}
-    function buildTarget(href){const u=new URL(href,window.location.origin);for(const [k,v] of incoming.entries()){if(!u.searchParams.has(k))u.searchParams.set(k,v);}packSrc(u);return u.toString();}
-    function patchAllAnchors(){document.querySelectorAll('a[href]').forEach(a=>{if(!isCheckout(a.href))return;a.href=buildTarget(a.href);});}
-    document.addEventListener('click',function(e){const a=e.target.closest('a');if(!a||!isCheckout(a.href))return;const target=buildTarget(a.href);if(a.href===target)return;e.preventDefault();e.stopImmediatePropagation();window.location.assign(target);},true);
-    document.addEventListener('DOMContentLoaded',patchAllAnchors);
-    new MutationObserver(patchAllAnchors).observe(document.documentElement,{childList:true,subtree:true});
-  })();
-  </script>
+  <!-- Script de UTMs atualizado LATAM -->
+<script>
+(function () {
+  // 👇 Parâmetros padrão (se o anúncio não enviar UTMs)
+  const DEFAULT_UTM = new URLSearchParams({
+    utm_source: 'facebook',
+    utm_medium: 'cpc',
+    utm_campaign: 'codigo_divino_latam',
+    utm_content: 'creative1_video',
+    utm_term: 'prosperidad_espiritual'
+  });
+
+  const incoming = new URLSearchParams(window.location.search);
+  for (const [k, v] of DEFAULT_UTM.entries()) {
+    if (!incoming.has(k)) incoming.set(k, v);
+  }
+
+  // 👇 Permite que o script só atue em links do checkout do domínio estadodivino.com
+  function isCheckout(href) {
+    try {
+      const u = new URL(href, window.location.origin);
+      return /(^|\.)estadodivino\.com$/i.test(u.hostname);
+    } catch {
+      return false;
+    }
+  }
+
+  // 👇 Monta o parâmetro "src" com as UTMs combinadas
+  function packSrc(urlObj) {
+    const existing = urlObj.searchParams.get('src') || 'codigo_divino';
+    const utmBlock = [
+      incoming.get('utm_source') ? 'utm_source=' + incoming.get('utm_source') : null,
+      incoming.get('utm_medium') ? 'utm_medium=' + incoming.get('utm_medium') : null,
+      incoming.get('utm_campaign') ? 'utm_campaign=' + incoming.get('utm_campaign') : null,
+      incoming.get('utm_content') ? 'utm_content=' + incoming.get('utm_content') : null,
+      incoming.get('utm_term') ? 'utm_term=' + incoming.get('utm_term') : null,
+    ].filter(Boolean).join('|');
+
+    const finalSrc = utmBlock && !existing.includes('utm_source=')
+      ? `${existing}|${utmBlock}`
+      : existing;
+
+    urlObj.searchParams.set('src', finalSrc);
+  }
+
+  // 👇 Injeta as UTMs e força a moeda USD no checkout
+  function buildTarget(href) {
+    const u = new URL(href, window.location.origin);
+    for (const [k, v] of incoming.entries()) {
+      if (!u.searchParams.has(k)) u.searchParams.set(k, v);
+    }
+    packSrc(u);
+    // força exibição em dólar (curr=USD)
+    if (!u.searchParams.has('curr')) u.searchParams.set('curr', 'USD');
+    return u.toString();
+  }
+
+  // 👇 Aplica o script a todos os botões de compra
+  function patchAllAnchors() {
+    document.querySelectorAll('a[href]').forEach(a => {
+      if (!isCheckout(a.href)) return;
+      a.href = buildTarget(a.href);
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    const a = e.target.closest('a');
+    if (!a || !isCheckout(a.href)) return;
+    const target = buildTarget(a.href);
+    if (a.href === target) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.location.assign(target);
+  }, true);
+
+  document.addEventListener('DOMContentLoaded', patchAllAnchors);
+  new MutationObserver(patchAllAnchors).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
 </body>
 </html>
