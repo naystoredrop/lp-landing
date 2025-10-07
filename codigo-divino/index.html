@@ -129,7 +129,25 @@
 
   </main>
 
-  <!-- Meta Pixel Code (movido para o final) -->
+  <!-- Script para passar UTM para todos os botões -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const params = window.location.search; // tudo após o ?
+    if (params) {
+      // Todos os botões principais (CTAs + oferta final)
+      const allLinks = document.querySelectorAll(".cta a, .offer");
+      allLinks.forEach(link => {
+        if (link.href.includes("?")) {
+          link.href += "&" + params.substring(1);
+        } else {
+          link.href += params;
+        }
+      });
+    }
+  });
+  </script>
+
+  <!-- Meta Pixel Code -->
   <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
