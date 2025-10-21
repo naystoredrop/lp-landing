@@ -1,1 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vídeos Narrados Shopee — LATAM</title>
 
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '779336198228035');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=779336198228035&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <style>
+    :root{
+      --bg:#000;
+      --text:#fff;
+      --maxw:1100px;
+      --cta:#EE4D2D;
+      --cta-hover:#d63f21;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:#000;color:#fff;font-family:system-ui,-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,"Segoe UI",sans-serif}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px}
+    main{display:block}
+    section{margin:0}
+    img{display:block;width:100%;height:auto;border:0}
+
+    /* CTA buttons */
+    .cta-wrap{display:flex;justify-content:center;align-items:center;padding:18px 0}
+    .cta{
+      display:inline-block;
+      width:100%;
+      max-width:680px;
+      text-align:center;
+      background:var(--cta);
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      line-height:1;
+      padding:18px 22px;
+      border-radius:999px;
+      transition:background .2s ease, transform .05s ease;
+    }
+    .cta:focus{outline:2px solid #fff3;border-radius:999px;outline-offset:2px}
+    .cta:hover{background:var(--cta-hover)}
+    .cta:active{transform:translateY(1px)}
+
+    /* FAQ container */
+    .faq{
+      background:#0a0a0a;
+      border-radius:14px;
+      padding:20px;
+      margin:24px 0;
+    }
+    .faq h2{
+      margin:0 0 6px 0;
+      font-size:clamp(18px,2.8vw,24px);
+      line-height:1.2;
+    }
+    .faq p.sub{
+      margin:0 0 14px 0;
+      color:#ddd;
+      font-size:clamp(14px,2.4vw,16px);
+    }
+    details{
+      background:#0d0d0d;
+      border:1px solid #1a1a1a;
+      border-radius:12px;
+      padding:0;
+      margin:10px 0;
+      overflow:hidden;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      user-select:none;
+      padding:14px 16px;
+      font-weight:700;
+      font-size:clamp(14px,2.6vw,16px);
+    }
+    summary::-webkit-details-marker{display:none}
+    details p{
+      margin:0;
+      padding:0 16px 14px 16px;
+      color:#e8e8e8;
+      font-size:clamp(14px,2.5vw,16px);
+      line-height:1.55;
+    }
+
+    /* Utility spacing around FAQ zone to clearly sit between #s16 and #s17 */
+    .faq-zone{padding:12px 0}
+  </style>
+</head>
+<body>
+
+  <!-- Barra-topo (usar exatamente este bloco ANTES de <main>) -->
+  <div id="e_1313492_1_173967184567b149259e736439016908" class="gpc-e e_html dd dm">
+    <div class="c e_html">
+      <div id="displayDate3" style="color:#fff; font-size: 16px; text-align: center; background: #ff6600; padding: 10px;">
+        Somente nos dias: <b><span id="datas"></span></b> você vai pagar apenas <b>$5.97</b>
+      </div>
+    </div>
+  </div>
+  <script>
+    function getDatas() {
+      var data = new Date();
+      var dias = [];
+      var mesAtual = data.toLocaleString('pt-BR', { month: 'long' });
+      for (var i = 2; i >= 0; i--) {
+        var novaData = new Date();
+        novaData.setDate(data.getDate() - i);
+        var dia = novaData.getDate();
+        dias.push(dia);
+      }
+      return dias.join(', ') + ' de ' + mesAtual;
+    }
+    document.addEventListener('DOMContentLoaded', function(){
+      var el = document.getElementById("datas");
+      if(el){ el.textContent = getDatas(); }
+    });
+  </script>
+
+  <main class="wrap" role="main">
+    <!-- Seção 1 -->
+    <section id="s1" aria-label="Seção 1">
+      <img src="1.png" alt="Vídeos Narrados Shopee — Apresentação" loading="eager">
+    </section>
+
+    <!-- CTA entre #s1 e #s2 -->
+    <div class="cta-wrap">
+      <a class="cta" href="#s13" aria-label="Ir para ofertas — Quero ganhar 5 mil al mes">QUIERO GANAR 5 MIL AL MES</a>
+    </div>
+
+    <!-- Seção 2 -->
+    <section id="s2" aria-label="Seção 2">
+      <img src="2.png" alt="Benefícios e proposta de valor">
+    </section>
+
+    <!-- Seção 3 -->
+    <section id="s3" aria-label="Seção 3">
+      <img src="3.png" alt="Como funciona — passo a passo">
+    </section>
+
+    <!-- Seção 4 -->
+    <section id="s4" aria-label="Seção 4">
+      <img src="4.png" alt="Demonstrações dos vídeos narrados">
+    </section>
+
+    <!-- Seção 5 -->
+    <section id="s5" aria-label="Seção 5">
+      <img src="5.png" alt="Resultados e provas sociais">
+    </section>
+
+    <!-- Seção 6 -->
+    <section id="s6" aria-label="Seção 6">
+      <img src="6.png" alt="Mais detalhes do produto">
+    </section>
+
+    <!-- Seção 7 -->
+    <section id="s7" aria-label="Seção 7">
+      <img src="7.png" alt="Explicação de como publicar e vender">
+    </section>
+
+    <!-- CTA entre #s7 e #s8 -->
+    <div class="cta-wrap">
+      <a class="cta" href="#s13" aria-label="Ir para ofertas — Quero copiar, pegar y vender">QUIERO COPIAR, PEGAR Y VENDER</a>
+    </div>
+
+    <!-- Seção 8 -->
+    <section id="s8" aria-label="Seção 8">
+      <img src="8.png" alt="Planos e vantagens">
+    </section>
+
+    <!-- Seção 9 -->
+    <section id="s9" aria-label="Seção 9">
+      <img src="9.png" alt="Segmentos e nichos sugeridos">
+    </section>
+
+    <!-- Seção 10 -->
+    <section id="s10" aria-label="Seção 10">
+      <img src="10.png" alt="Calendário e frequência de entregas">
+    </section>
+
+    <!-- Seção 11 -->
+    <section id="s11" aria-label="Seção 11">
+      <img src="11.png" alt="Benefícios adicionais e bônus">
+    </section>
+
+    <!-- CTA entre #s11 e #s12 -->
+    <div class="cta-wrap">
+      <a class="cta" href="#s13" aria-label="Ir para ofertas — Quero transformar clic en ventas">QUIERO TRANSFORMAR CLIC EN VENTAS</a>
+    </div>
+
+    <!-- Seção 12 -->
+    <section id="s12" aria-label="Seção 12">
+      <img src="12.png" alt="Garantias e suporte">
+    </section>
+
+    <!-- Seção 13 -->
+    <section id="s13" aria-label="Seção 13">
+      <img src="13.png" alt="Chamada para a oferta principal">
+    </section>
+
+    <!-- Seção 14 — link de checkout -->
+    <section id="s14" aria-label="Seção 14 — Oferta 1">
+      <a href="https://pay.hotmart.com/V102529777Q?off=mc2kmnro" target="_blank" rel="noopener nofollow" aria-label="Ir para o checkout da Oferta 1">
+        <img src="14.png" alt="Oferta 1 — Clique para comprar">
+      </a>
+    </section>
+
+    <!-- Seção 15 — link de checkout -->
+    <section id="s15" aria-label="Seção 15 — Oferta 2">
+      <a href="https://pay.hotmart.com/V102529777Q?off=p6f79b0v" target="_blank" rel="noopener nofollow" aria-label="Ir para o checkout da Oferta 2">
+        <img src="15.png" alt="Oferta 2 — Clique para comprar">
+      </a>
+    </section>
+
+    <!-- Seção 16 -->
+    <section id="s16" aria-label="Seção 16">
+      <img src="16.png" alt="Informações complementares antes do FAQ">
+    </section>
+
+    <!-- FAQ entre #s16 e #s17 -->
+    <div class="faq-zone">
+      <div class="faq" role="region" aria-labelledby="faq-title">
+        <h2 id="faq-title">PERGUNTAS FREQUENTES</h2>
+        <p class="sub">Confira as respostas para as principais dúvidas sobre os Vídeos Narrados da Shopee</p>
+
+        <details>
+          <summary>1) Sou iniciante, vou conseguir usar os vídeos?</summary>
+          <p><strong>Sim!</strong> Os vídeos narrados são totalmente prontos. Basta baixar, postar e começar a vender, mesmo que você nunca tenha vendido antes.</p>
+        </details>
+
+        <details>
+          <summary>2) Com que frequência vou receber novos vídeos?</summary>
+          <p><strong>Você receberá novos vídeos narrados todos os dias</strong> para manter seu perfil sempre atualizado e atrativo para vendas.</p>
+        </details>
+
+        <details>
+          <summary>3) Preciso editar ou narrar os vídeos?</summary>
+          <p><strong>Não!</strong> Os vídeos já vêm narrados e prontos para postagem. Você só precisa baixar e publicar.</p>
+        </details>
+
+        <details>
+          <summary>4) Os vídeos realmente ajudam a vender?</summary>
+          <p><strong>Sim!</strong> Os vídeos são testados e narrados com estratégias de conversão para gerar mais cliques e vendas diariamente.</p>
+        </details>
+
+        <details>
+          <summary>5) Posso usar os vídeos em qualquer conta?</summary>
+          <p><strong>Sim!</strong> Você pode postar os vídeos em qualquer conta de afiliado Shopee, seja no seu perfil pessoal ou em páginas temáticas.</p>
+        </details>
+
+        <details>
+          <summary>6) Por quanto tempo vou ter acesso aos vídeos?</summary>
+          <p><strong>Você terá acesso contínuo</strong> enquanto permanecer assinando o produto.</p>
+        </details>
+      </div>
+    </div>
+
+    <!-- CTA depois do FAQ e antes de #s17 -->
+    <div class="cta-wrap">
+      <a class="cta" href="#s15" aria-label="Ir para checkout — Quero empezar ahora">QUIERO EMPEZAR AHORA</a>
+    </div>
+
+    <!-- Seção 17 -->
+    <section id="s17" aria-label="Seção 17">
+      <img src="17.png" alt="Encerramento e reforço final">
+    </section>
+  </main>
+</body>
+</html>
