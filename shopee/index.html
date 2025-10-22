@@ -1,223 +1,135 @@
-<!DOCTYPE html>
-<html lang="es">
+<!doctype html>
+<html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Videos Doblados Shopee — LATAM</title>
-
-  <!-- Meta Pixel Code -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '779336198228035');
-  fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=779336198228035&ev=PageView&noscript=1"
-  /></noscript>
-  <!-- End Meta Pixel Code -->
-
+  <title>Página de Vendas — Achadinhos Nayara</title>
+  <meta name="description" content="Transformamos ideias em renda. Página de vendas oficial." />
+  <link rel="preload" href="1.png" as="image" />
   <style>
     :root{
-      --bg:#000;
-      --text:#fff;
-      --maxw:1100px;
-      --cta:#EE4D2D;
-      --cta-hover:#d63f21;
+      --accent:#EE4D2D; /* Shopee orange */
+      --text:#111;
+      --bg:#fff;
+      --radius:16px;
+      --maxw:980px;
     }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:#000;color:#fff;font-family:system-ui,-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,"Segoe UI",sans-serif}
-    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px}
-    main{display:block}
-    section{margin:0}
-    img{display:block;width:100%;height:auto;border:0}
-
-    .cta-wrap{display:flex;justify-content:center;align-items:center;padding:18px 0}
-    .cta{
-      display:inline-block;
-      width:100%;
-      max-width:680px;
-      text-align:center;
-      background:var(--cta);
-      color:#fff;
-      text-decoration:none;
-      font-weight:700;
-      line-height:1;
-      padding:18px 22px;
-      border-radius:999px;
-      transition:background .2s ease, transform .05s ease;
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;scroll-behavior:smooth}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:12px}
+    img.block{display:block;width:100%;height:auto;border-radius:0}
+    /* Header nav com CTAs âncora */
+    .topnav{
+      position:sticky; top:0; z-index:10;
+      background:rgba(255,255,255,.92); backdrop-filter:saturate(140%) blur(8px);
+      border-bottom:1px solid #eee;
     }
-    .cta:focus{outline:2px solid #fff3;border-radius:999px;outline-offset:2px}
-    .cta:hover{background:var(--cta-hover)}
-    .cta:active{transform:translateY(1px)}
-
-    .faq{
-      background:#0a0a0a;
-      border-radius:14px;
-      padding:20px;
-      margin:24px 0;
+    .navinner{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap;padding:10px}
+    .btn{
+      appearance:none;border:0;cursor:pointer;text-decoration:none;
+      padding:12px 16px;border-radius:999px;font-weight:700;line-height:1;
+      transition:transform .06s ease, box-shadow .12s ease;
+      box-shadow:0 1px 0 rgba(0,0,0,.08);
+      display:inline-flex;align-items:center;gap:8px;
     }
-    .faq h2{
-      margin:0 0 6px 0;
-      font-size:clamp(18px,2.8vw,24px);
-      line-height:1.2;
+    .btn--primary{background:var(--accent);color:#fff}
+    .btn--ghost{background:#fff;color:var(--accent);border:2px solid var(--accent)}
+    .btn:active{transform:translateY(1px)}
+    /* seção FAQ compacta, entre 15.gif e 16.png */
+    .faq{padding:24px 12px;margin:8px auto;border:1px solid #eee;border-radius:var(--radius);background:#fff}
+    .faq h2{margin:0 0 12px;font-size:1.25rem}
+    details{border-top:1px solid #f0f0f0;padding:12px 0}
+    details:first-of-type{border-top:0}
+    summary{cursor:pointer;font-weight:700}
+    /* Footer CTA flutuante opcional (pode remover se não quiser) */
+    .float-cta{
+      position:fixed;right:12px;bottom:12px;z-index:10;
+      display:flex;gap:8px;flex-direction:column;
     }
-    .faq p.sub{
-      margin:0 0 14px 0;
-      color:#ddd;
-      font-size:clamp(14px,2.4vw,16px);
-    }
-    details{
-      background:#0d0d0d;
-      border:1px solid #1a1a1a;
-      border-radius:12px;
-      padding:0;
-      margin:10px 0;
-      overflow:hidden;
-    }
-    summary{
-      cursor:pointer;
-      list-style:none;
-      user-select:none;
-      padding:14px 16px;
-      font-weight:700;
-      font-size:clamp(14px,2.6vw,16px);
-    }
-    summary::-webkit-details-marker{display:none}
-    details p{
-      margin:0;
-      padding:0 16px 14px 16px;
-      color:#e8e8e8;
-      font-size:clamp(14px,2.5vw,16px);
-      line-height:1.55;
-    }
-    .faq-zone{padding:12px 0}
+    .float-cta .btn{padding:12px 18px}
+    /* Acessibilidade de salto */
+    .anchor-spacer{scroll-margin-top:80px}
   </style>
 </head>
 <body>
 
-  <!-- Barra-topo (traducida al español) -->
-  <div id="e_1313492_1_173967184567b149259e736439016908" class="gpc-e e_html dd dm">
-    <div class="c e_html">
-      <div id="displayDate3" style="color:#fff; font-size: 16px; text-align: center; background: #ff6600; padding: 10px;">
-        Solo los días: <b><span id="datas"></span></b> pagarás solo <b>$5.97</b>
-      </div>
+  <!-- NAV com âncoras -->
+  <div class="topnav">
+    <div class="navinner wrap">
+      <a href="#oferta" class="btn btn--primary">Ver Oferta</a>
+      <a href="#faq" class="btn btn--ghost">Perguntas Frequentes</a>
     </div>
   </div>
-  <script>
-    function getDatas() {
-      var data = new Date();
-      var dias = [];
-      var mesAtual = data.toLocaleString('es-ES', { month: 'long' });
-      for (var i = 2; i >= 0; i--) {
-        var nuevaFecha = new Date();
-        nuevaFecha.setDate(data.getDate() - i);
-        var dia = nuevaFecha.getDate();
-        dias.push(dia);
-      }
-      return dias.join(', ') + ' de ' + mesAtual;
-    }
-    document.addEventListener('DOMContentLoaded', function(){
-      var el = document.getElementById("datas");
-      if(el){ el.textContent = getDatas(); }
-    });
-  </script>
 
-  <main class="wrap" role="main">
+  <main class="wrap">
 
-    <section id="s1" aria-label="Sección 1">
-      <img src="1.png" alt="Videos Doblados Shopee — Presentación" loading="eager">
-    </section>
+    <!-- PILHA DE IMAGENS (1.png até 14.png) -->
+    <img src="1.png"  alt="Seção 1"  class="block" loading="eager" fetchpriority="high" />
+    <img src="2.png"  alt="Seção 2"  class="block" loading="lazy" />
+    <img src="3.png"  alt="Seção 3"  class="block" loading="lazy" />
+    <img src="4.png"  alt="Seção 4"  class="block" loading="lazy" />
+    <img src="5.png"  alt="Seção 5"  class="block" loading="lazy" />
+    <img src="6.png"  alt="Seção 6"  class="block" loading="lazy" />
+    <img src="7.png"  alt="Seção 7"  class="block" loading="lazy" />
+    <img src="8.png"  alt="Seção 8"  class="block" loading="lazy" />
+    <img src="9.png"  alt="Seção 9"  class="block" loading="lazy" />
+    <img src="10.png" alt="Seção 10" class="block" loading="lazy" />
+    <img src="11.png" alt="Seção 11" class="block" loading="lazy" />
+    <img src="12.png" alt="Seção 12" class="block" loading="lazy" />
+    <img src="13.png" alt="Seção 13" class="block" loading="lazy" />
+    <img src="14.png" alt="Seção 14" class="block" loading="lazy" />
 
-    <div class="cta-wrap">
-      <a class="cta" href="#s13" aria-label="Ir a ofertas — Quiero ganar 5 mil al mes">QUIERO GANAR 5 MIL AL MES</a>
-    </div>
+    <!-- OFERTA: 15.gif (ÂNCORA) -->
+    <div id="oferta" class="anchor-spacer"></div>
+    <img src="15.gif" alt="Oferta" class="block" loading="lazy" />
 
-    <section id="s2"><img src="2.png" alt="Beneficios y propuesta de valor"></section>
-    <section id="s3"><img src="3.png" alt="Cómo funciona — paso a paso"></section>
-    <section id="s4"><img src="4.png" alt="Demostraciones de los videos doblados"></section>
-    <section id="s5"><img src="5.png" alt="Resultados y pruebas sociales"></section>
-    <section id="s6"><img src="6.png" alt="Más detalles del producto"></section>
-    <section id="s7"><img src="7.png" alt="Explicación de cómo publicar y vender"></section>
+    <!-- FAQ ENTRE 15.gif E 16.png (ÂNCORA) -->
+    <section id="faq" class="faq anchor-spacer">
+      <h2>Perguntas Frequentes</h2>
 
-    <div class="cta-wrap">
-      <a class="cta" href="#s13" aria-label="Ir a ofertas — Quiero copiar, pegar y vender">QUIERO COPIAR, PEGAR Y VENDER</a>
-    </div>
+      <!--
+        DICA: Substitua os textos abaixo pelo copy exato da sua FAQ (se já estiver embedado numa imagem, pode apagar esta seção).
+        Mantive uma FAQ HTML para SEO e acessibilidade. Se não quiser texto, remova o <section id="faq"> inteiro.
+      -->
 
-    <section id="s8"><img src="8.png" alt="Planes y ventajas"></section>
-    <section id="s9"><img src="9.png" alt="Segmentos y nichos sugeridos"></section>
-    <section id="s10"><img src="10.png" alt="Calendario y frecuencia de entregas"></section>
-    <section id="s11"><img src="11.png" alt="Beneficios adicionales y bonos"></section>
+      <details>
+        <summary>Como recebo o acesso após a compra?</summary>
+        <div>O acesso é enviado automaticamente para o e-mail informado no checkout, com instruções passo a passo.</div>
+      </details>
+      <details>
+        <summary>Funciona no celular?</summary>
+        <div>Sim. Todo o conteúdo é compatível com dispositivos móveis.</div>
+      </details>
+      <details>
+        <summary>Tem garantia?</summary>
+        <div>Você tem garantia conforme as condições exibidas na página de oferta.</div>
+      </details>
 
-    <div class="cta-wrap">
-      <a class="cta" href="#s13" aria-label="Ir a ofertas — Quiero transformar clics en ventas">QUIERO TRANSFORMAR CLICS EN VENTAS</a>
-    </div>
-
-    <section id="s12"><img src="12.png" alt="Garantías y soporte"></section>
-    <section id="s13"><img src="13.png" alt="Llamada a la oferta principal"></section>
-
-    <section id="s14">
-      <a href="https://pay.hotmart.com/V102529777Q?off=mc2kmnro" target="_blank" rel="noopener nofollow" aria-label="Ir al checkout de la Oferta 1">
-        <img src="14.png" alt="Oferta 1 — Haz clic para comprar">
-      </a>
-    </section>
-
-    <section id="s15">
-      <a href="https://pay.hotmart.com/V102529777Q?off=p6f79b0v" target="_blank" rel="noopener nofollow" aria-label="Ir al checkout de la Oferta 2">
-        <img src="15.gif" alt="Oferta 2 — Haz clic para comprar">
-      </a>
-    </section>
-
-    <section id="s16"><img src="16.png" alt="Información adicional antes del FAQ"></section>
-
-    <div class="faq-zone">
-      <div class="faq" role="region" aria-labelledby="faq-title">
-        <h2 id="faq-title">PREGUNTAS FRECUENTES</h2>
-        <p class="sub">Consulta las respuestas a las dudas más comunes sobre los Videos Doblados de Shopee</p>
-
-        <details>
-          <summary>1) Soy principiante, ¿podré usar los videos?</summary>
-          <p><strong>¡Sí!</strong> Los videos doblados están totalmente listos. Solo tienes que descargarlos, publicarlos y empezar a vender, incluso si nunca lo has hecho antes.</p>
-        </details>
-
-        <details>
-          <summary>2) ¿Con qué frecuencia recibiré nuevos videos?</summary>
-          <p><strong>Recibirás nuevos videos doblados todos los días</strong> para mantener tu perfil actualizado y atractivo para las ventas.</p>
-        </details>
-
-        <details>
-          <summary>3) ¿Tengo que editar o doblar los videos?</summary>
-          <p><strong>No.</strong> Los videos ya vienen doblados y listos para publicar. Solo necesitas descargarlos y subirlos.</p>
-        </details>
-
-        <details>
-          <summary>4) ¿Realmente ayudan a vender?</summary>
-          <p><strong>Sí.</strong> Son videos probados, narrados con estrategias de conversión diseñadas para generar más clics y ventas diarias.</p>
-        </details>
-
-        <details>
-          <summary>5) ¿Puedo usar los videos en cualquier cuenta?</summary>
-          <p><strong>Sí.</strong> Puedes publicar los videos en cualquier cuenta de afiliado Shopee, ya sea en tu perfil personal o en páginas temáticas.</p>
-        </details>
-
-        <details>
-          <summary>6) ¿Por cuánto tiempo tendré acceso a los videos?</summary>
-          <p><strong>Tendrás acceso continuo</strong> mientras mantengas activa tu suscripción al producto.</p>
-        </details>
+      <!-- CTA rápido dentro da FAQ -->
+      <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+        <a href="#oferta" class="btn btn--primary">Quero a Oferta</a>
       </div>
+    </section>
+
+    <!-- CONTINUAÇÃO DAS IMAGENS (16.png, 17.png...) -->
+    <img src="16.png" alt="Seção 16" class="block" loading="lazy" />
+    <img src="17.png" alt="Seção 17" class="block" loading="lazy" />
+
+    <!-- Botões de retorno -->
+    <div style="display:flex;gap:8px;justify-content:center;margin:24px 0">
+      <a href="#oferta" class="btn btn--primary">Ir para Oferta</a>
+      <a href="#top" class="btn btn--ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Voltar ao topo</a>
     </div>
 
-    <div class="cta-wrap">
-      <a class="cta" href="#s15" aria-label="Ir al checkout — Quiero empezar ahora">QUIERO EMPEZAR AHORA</a>
-    </div>
-
-    <section id="s17"><img src="17.png" alt="Cierre y refuerzo final"></section>
   </main>
+
+  <!-- CTA flutuante (opcional) -->
+  <div class="float-cta">
+    <a href="#oferta" class="btn btn--primary">Comprar agora</a>
+    <a href="#faq" class="btn btn--ghost">FAQ</a>
+  </div>
+
+  <!-- Qualquer JS extra que você queira injetar (ex.: pixel) pode ir aqui -->
+  <!-- <script>/* Meta Pixel / Analytics */</script> -->
 </body>
 </html>
