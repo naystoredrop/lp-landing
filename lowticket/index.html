@@ -1,19 +1,48 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Vídeos Narrados Shopee — Landing</title>
-  <meta name="description" content="Pacote de vídeos narrados prontos para afiliados Shopee. Baixe, poste e venda.">
-  <link rel="preload" as="image" href="1.png">
+  <meta charset="utf-8">
+  <style>
+    :root{
+      --bg:#000;
+      --text:#fff;
+      --shopee:#EE4D2D;
+      --shopee-hover:#d63f21;
+      --maxw:1100px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,Ubuntu,"Noto Sans","Liberation Sans",sans-serif;line-height:1.4}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:0 12px}
+    main{display:block}
+    section{margin:0;padding:0}
+    img{display:block;width:100%;height:auto;border:0}
+    /* CTA buttons */
+    .cta-wrap{display:flex;justify-content:center;align-items:center;padding:18px 0}
+    .cta-btn{
+      display:inline-block;
+      width:100%;
+      max-width:680px;
+      text-align:center;
+      background:var(--shopee);
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      padding:16px 22px;
+      border-radius:999px;
+      transition:background .2s ease;
+    }
+    .cta-btn:hover,.cta-btn:focus{background:var(--shopee-hover)}
+    .cta-btn:focus{outline:2px solid #fff;outline-offset:2px}
 
-  <!-- 🔥 OG TAGS -->
-  <meta property="og:title" content="Vídeos Narrados Shopee — Ganhe 5 mil por mês com vídeos prontos">
-  <meta property="og:description" content="Baixe vídeos narrados prontos, poste e venda. Transforme cliques em PIX diariamente.">
-  <meta property="og:image" content="https://achadinhos.nayarasilveira.com.br/cover.jpg">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://achadinhos.nayarasilveira.com.br/">
-  <meta name="twitter:card" content="summary_large_image">
+    /* FAQ */
+    .faq{background:#0a0a0a;border-radius:16px;padding:20px;margin:20px 0}
+    .faq h2{margin:0 0 6px 0;font-size:clamp(18px,3.5vw,24px)}
+    .faq p.sub{margin:0 0 14px 0;opacity:.85;font-size:clamp(14px,3vw,16px)}
+    details{background:#0c0c0c;border:1px solid #151515;border-radius:12px;margin:10px 0}
+    summary{cursor:pointer;list-style:none;padding:14px 16px;font-weight:600}
+    summary::-webkit-details-marker{display:none}
+    details p{padding:0 16px 16px 16px;margin:0;opacity:.95}
+  </style>
 
   <!-- Meta Pixel Code -->
   <script>
@@ -32,201 +61,114 @@
   src="https://www.facebook.com/tr?id=704776715751233&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Meta Pixel Code -->
-
-  <style>
-    :root{
-      --accent:#EE4D2D;
-      --accent-dark:#d63f21;
-      --text:#fff;
-      --bg:#000;
-      --maxw:1100px;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0; padding:0; background:var(--bg); color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;}
-    img{display:block; width:100%; height:auto;}
-    main{max-width:var(--maxw); margin:0 auto;}
-    section{width:100%;}
-    .wrap{max-width:var(--maxw); margin:0 auto; padding:0 12px;}
-    .cta{display:flex; justify-content:center; margin:20px 0; padding:0 12px;}
-    .cta a{display:inline-block; text-decoration:none; font-weight:800; padding:18px 22px; border-radius:999px; background:var(--accent); color:#fff; box-shadow: 0 6px 16px rgba(0,0,0,.35); transition:.2s transform, .2s background; text-align:center; width:100%; max-width:680px;}
-    .cta a:hover{background:var(--accent-dark); transform: translateY(-1px);}
-    .cta a:active{transform: translateY(0);}
-    .faq{background:#0a0a0a; color:#fff; padding:24px 14px 28px; border-radius:16px; margin:24px auto; width:100%; max-width:var(--maxw);}
-    .faq h2{margin:6px 0 8px; font-size: clamp(18px, 3.5vw, 28px); text-align:center;}
-    .faq .sub{opacity:.9; text-align:center; margin:0 0 12px; font-size: clamp(12px, 2.8vw, 16px);}
-    details{background:#111; border:1px solid #1e1e1e; border-radius:12px; padding:14px 16px; margin:10px 0;}
-    summary{cursor:pointer; font-weight:700; outline:none; list-style:none;}
-    details[open]{background:#131313;}
-    details p{margin:10px 0 0 0; line-height:1.55;}
-    .spacer{height:36px;}
-    img{-webkit-user-drag:none; user-select:none;}
-    .anchor{position:relative; top:-10px; visibility:hidden;}
-    .offer{display:block;}
-    .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0;}
-    @media (max-width: 480px){
-      .cta a{padding:16px 18px; font-size:15px;}
-      details{padding:12px 14px;}
-      details p{font-size:14px;}
-    }
-  </style>
 </head>
 <body>
 
-  <h1 style="position:absolute;left:-9999px;">
-    Vídeos Narrados Shopee — Ganhe 5 mil por mês com vídeos prontos para afiliados
-  </h1>
-
-  <!-- ===== Barra Topo ===== -->
-  <div id="e_1313492_1_173967184567b149259e736439016908" class="gpc-e e_html dd dm">
-    <div class="c e_html">
-      <div id="displayDate3" style="color:#fff; font-size:16px; text-align:center; background:#ff6600; padding:10px;">
-        Somente nos dias: <b><span id="datas"></span></b> você vai pagar apenas <b>R$ 497,00</b>
-      </div>
+<div id="e_1313492_1_173967184567b149259e736439016908" class="gpc-e e_html dd dm">
+  <div class="c e_html">
+    <div id="displayDate3" style="color:#fff; font-size: 16px; text-align: center; background: #ff6600; padding: 10px;">
+      Somente nos dias: <b><span id="datas"></span></b> você vai pagar apenas <b>R$ 10,00</b>
     </div>
   </div>
-  <script>
-    function getDatas() {
-      var data = new Date();
-      var dias = [];
-      var mesAtual = data.toLocaleString('pt-BR', { month: 'long' });
-      for (var i = 2; i >= 0; i--) {
-        var novaData = new Date();
-        novaData.setDate(data.getDate() - i);
-        dias.push(novaData.getDate());
-      }
-      return dias.join(', ') + ' de ' + mesAtual;
+</div>
+<script>
+  function getDatas() {
+    var data = new Date();
+    var dias = [];
+    var mesAtual = data.toLocaleString('pt-BR', { month: 'long' });
+    for (var i = 2; i >= 0; i--) {
+      var novaData = new Date();
+      novaData.setDate(data.getDate() - i);
+      var dia = novaData.getDate();
+      dias.push(dia);
     }
-    document.addEventListener('DOMContentLoaded', function(){
-      var el = document.getElementById("datas");
-      if(el){ el.textContent = getDatas(); }
-    });
-  </script>
+    return dias.join(', ') + ' de ' + mesAtual;
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    var el = document.getElementById("datas");
+    if(el){ el.textContent = getDatas(); }
+  });
+</script>
 
-  <main>
-    <section id="s1"><img src="1.png" alt="Seção 1" loading="eager"></section>
-    <div class="cta"><a href="#s13">QUERO GANHAR 5 MIL POR MÊS</a></div>
-    <section id="s2"><img src="2.png" alt="Seção 2"></section>
-    <section id="s3"><img src="3.png" alt="Seção 3"></section>
-    <section id="s4"><img src="4.png" alt="Seção 4"></section>
-    <section id="s5"><img src="5.png" alt="Seção 5"></section>
-    <section id="s6"><img src="6.png" alt="Seção 6"></section>
-    <section id="s7"><img src="7.png" alt="Seção 7"></section>
+<main class="wrap">
 
-    <div class="cta"><a href="#s13">QUERO COPIAR, COLAR E VENDER</a></div>
+  <section id="s1"><img src="1.png" alt="Seção 1" loading="eager"></section>
 
-    <section id="s8"><img src="8.png" alt="Seção 8"></section>
-    <section id="s9"><img src="9.png" alt="Seção 9"></section>
-    <section id="s10"><img src="10.png" alt="Seção 10"></section>
-    <section id="s11"><img src="11.png" alt="Seção 11"></section>
+  <div class="cta-wrap">
+    <a class="cta-btn" href="#s13" aria-label="Ir para a seção de oferta na seção 13">QUERO GANHAR 5 MIL POR MÊS</a>
+  </div>
 
-    <div class="cta"><a href="#s13">QUERO TRANSFORMAR CLIQUES EM PIX</a></div>
+  <section id="s2"><img src="2.png" alt="Seção 2"></section>
+  <section id="s3"><img src="3.png" alt="Seção 3"></section>
+  <section id="s4"><img src="4.png" alt="Seção 4"></section>
+  <section id="s5"><img src="5.png" alt="Seção 5"></section>
+  <section id="s6"><img src="6.png" alt="Seção 6"></section>
+  <section id="s7"><img src="7.png" alt="Seção 7"></section>
 
-    <section id="s12"><img src="12.png" alt="Seção 12"></section>
-    <section id="s13"><img src="13.png" alt="Seção 13 — CTA principal"></section>
+  <div class="cta-wrap">
+    <a class="cta-btn" href="#s13" aria-label="Ir para a seção de oferta na seção 13">QUERO COPIAR, COLAR E VENDER</a>
+  </div>
 
-    <section id="s14">
-      <a class="offer" href="https://achadinhos.nayarasilveira.com.br/upgrade" target="_blank" rel="noopener nofollow">
-        <span class="sr-only">Ir para checkout da Oferta Básica</span>
-        <img src="14.png" alt="Oferta Básica — Clique para comprar">
-      </a>
-    </section>
+  <section id="s8"><img src="8.png" alt="Seção 8"></section>
+  <section id="s9"><img src="9.png" alt="Seção 9"></section>
+  <section id="s10"><img src="10.png" alt="Seção 10"></section>
+  <section id="s11"><img src="11.png" alt="Seção 11"></section>
 
-    <section id="s15">
-      <a class="offer" href="https://acheinavovo.com.br/ckt/oPpWNQ" target="_blank" rel="noopener nofollow">
-        <span class="sr-only">Ir para checkout da Oferta Premium</span>
-        <img src="15.gif" alt="Oferta Premium — Clique para comprar">
-      </a>
-    </section>
+  <div class="cta-wrap">
+    <a class="cta-btn" href="#s13" aria-label="Ir para a seção de oferta na seção 13">QUERO TRANSFORMAR CLIQUES EM PIX</a>
+  </div>
 
-    <section id="s16"><img src="16.png" alt="Seção 16"></section>
+  <section id="s12"><img src="12.png" alt="Seção 12"></section>
+  <section id="s13"><img src="13.png" alt="Seção 13"></section>
 
-    <section id="faq" class="faq">
-      <h2>PERGUNTAS FREQUENTES</h2>
-      <p class="sub">Confira as respostas para as principais dúvidas sobre os Vídeos Narrados da Shopee</p>
+  <section id="s14">
+    <a href="https://pagamento.acheinavovo.com.br/ckt/NeAeBD" target="_blank" rel="noopener nofollow" aria-label="Ir para checkout oferta seção 14">
+      <img src="14.png" alt="Seção 14 — Oferta">
+    </a>
+  </section>
 
-      <details><summary>Sou iniciante, vou conseguir usar os vídeos?</summary><p>Sim! Os vídeos narrados são totalmente prontos. Basta baixar, postar e começar a vender.</p></details>
-      <details><summary>Com que frequência vou receber novos vídeos?</summary><p>Você receberá novos vídeos narrados todos os dias.</p></details>
-      <details><summary>Preciso editar ou narrar os vídeos?</summary><p>Não! Já vêm narrados e prontos.</p></details>
-      <details><summary>Os vídeos realmente ajudam a vender?</summary><p>Sim! São testados com estratégias de conversão reais.</p></details>
-      <details><summary>Posso usar em qualquer conta?</summary><p>Sim! Em qualquer perfil de afiliado Shopee.</p></details>
-      <details><summary>Por quanto tempo terei acesso?</summary><p>Enquanto permanecer assinando o produto.</p></details>
+  <section id="s15">
+    <a href="https://pagamento.acheinavovo.com.br/ckt/qPzPOd" target="_blank" rel="noopener nofollow" aria-label="Ir para checkout oferta seção 15">
+      <img src="15.png" alt="Seção 15 — Oferta">
+    </a>
+  </section>
 
-      <div class="cta" style="margin-top:18px;">
-        <a href="#s15">QUERO COMEÇAR AGORA</a>
-      </div>
-    </section>
+  <!-- FAQ antes da última imagem -->
+  <section aria-label="Perguntas Frequentes" class="faq" id="faq">
+    <h2>PERGUNTAS FREQUENTES</h2>
+    <p class="sub">Confira as respostas para as principais dúvidas sobre os Vídeos Narrados da Shopee</p>
 
-    <section id="s17"><img src="17.png" alt="Seção 17"></section>
-    <div class="spacer"></div>
-  </main>
+    <details><summary>1) Sou iniciante, vou conseguir usar os vídeos?</summary>
+      <p><strong>Sim!</strong> Os vídeos narrados são totalmente prontos. Basta baixar, postar e começar a vender, mesmo que você nunca tenha vendido antes.</p>
+    </details>
 
-  <!-- 🔧 Script UTM atualizado -->
-  <script>
-  (function () {
-    const DEFAULT_UTM = new URLSearchParams({
-      utm_source: 'facebook',
-      utm_medium: 'cpc',
-      utm_campaign: 'achadinhos_narrados_base'
-    });
+    <details><summary>2) Com que frequência vou receber novos vídeos?</summary>
+      <p><strong>Você receberá novos vídeos narrados todos os dias</strong> para manter seu perfil sempre atualizado e atrativo para vendas.</p>
+    </details>
 
-    const incoming = new URLSearchParams(window.location.search);
-    for (const [k, v] of DEFAULT_UTM.entries()) {
-      if (!incoming.has(k)) incoming.set(k, v);
-    }
+    <details><summary>3) Preciso editar ou narrar os vídeos?</summary>
+      <p><strong>Não!</strong> Os vídeos já vêm narrados e prontos para postagem. Você só precisa baixar e publicar.</p>
+    </details>
 
-    function isCheckout(href) {
-      try {
-        const u = new URL(href, window.location.origin);
-        return /(^|\.)acheinavovo\.com\.br$/i.test(u.hostname);
-      } catch { return false; }
-    }
+    <details><summary>4) Os vídeos realmente ajudam a vender?</summary>
+      <p><strong>Sim!</strong> Os vídeos são testados e narrados com estratégias de conversão para gerar mais cliques e vendas diariamente.</p>
+    </details>
 
-    function packSrc(urlObj) {
-      const existing = urlObj.searchParams.get('src') || 'achadinhos';
-      const utmBlock = [
-        incoming.get('utm_source')  ? 'utm_source='+incoming.get('utm_source')   : null,
-        incoming.get('utm_medium')  ? 'utm_medium='+incoming.get('utm_medium')   : null,
-        incoming.get('utm_campaign')? 'utm_campaign='+incoming.get('utm_campaign'): null,
-        incoming.get('utm_content') ? 'utm_content='+incoming.get('utm_content') : null,
-      ].filter(Boolean).join('|');
-      const finalSrc = utmBlock
-        ? (existing.includes('utm_source=') || existing.includes('utm_medium=') || existing.includes('utm_campaign=') || existing.includes('utm_content='))
-            ? existing
-            : `${existing}|${utmBlock}`
-        : existing;
-      urlObj.searchParams.set('src', finalSrc);
-    }
+    <details><summary>5) Posso usar os vídeos em qualquer conta?</summary>
+      <p><strong>Sim!</strong> Você pode postar os vídeos em qualquer conta de afiliado Shopee, seja no seu perfil pessoal ou em páginas temáticas.</p>
+    </details>
 
-    function buildTarget(href) {
-      const u = new URL(href, window.location.origin);
-      for (const [k, v] of incoming.entries()) {
-        if (!u.searchParams.has(k)) u.searchParams.set(k, v);
-      }
-      packSrc(u);
-      return u.toString();
-    }
+    <details><summary>6) Por quanto tempo vou ter acesso aos vídeos?</summary>
+      <p><strong>Você terá acesso contínuo</strong> enquanto permanecer assinando o produto.</p>
+    </details>
+  </section>
 
-    function patchAllAnchors() {
-      document.querySelectorAll('a[href]').forEach(a => {
-        if (!isCheckout(a.href)) return;
-        a.href = buildTarget(a.href);
-      });
-    }
+  <div class="cta-wrap">
+    <a class="cta-btn" href="#s15" aria-label="Ir para a seção 15 para começar agora">QUERO COMEÇAR AGORA</a>
+  </div>
 
-    document.addEventListener('click', function (e) {
-      const a = e.target.closest('a');
-      if (!a || !isCheckout(a.href)) return;
-      const target = buildTarget(a.href);
-      if (a.href === target) return;
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      window.location.assign(target);
-    }, true);
+  <section id="s16"><img src="16.png" alt="Seção 16 — Final da página"></section>
 
-    document.addEventListener('DOMContentLoaded', patchAllAnchors);
-    new MutationObserver(patchAllAnchors).observe(document.documentElement, { childList: true, subtree: true });
-  })();
-  </script>
-
+</main>
 </body>
 </html>
