@@ -1,9 +1,85 @@
-<div style="position: relative; padding-top: 125%;">
-  <iframe
-    src="https://customer-b2gdb94hrid04n5r.cloudflarestream.com/bbc43ed043234266b773fb652abb6408/iframe?poster=https%3A%2F%2Fcustomer-b2gdb94hrid04n5r.cloudflarestream.com%2Fbbc43ed043234266b773fb652abb6408%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
-    loading="lazy"
-    style="border: none; position: absolute; top: 0; left: 0; height: 100%; width: 100%;"
-    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-    allowfullscreen="true"
-  ></iframe>
-</div>
+<!-- SDK oficial do Cloudflare Stream -->
+<script defer src="https://embed.cloudflarestream.com/embed/sdk.latest.js"></script>
+
+<section id="vsl" style="background:#000; padding:0; margin:0;">
+  <div class="vsl-wrap">
+    <!-- PLAYER -->
+    <stream
+      id="streamPlayer"
+      class="stream-player"
+      controls
+      autoplay
+      muted
+      playsinline
+      primaryColor="#EE4D2D"
+      preload
+      data-src="UID_DO_VIDEO">
+    </stream>
+
+    <!-- BARRA DE PROGRESSO -->
+    <div class="vsl-progress">
+      <div class="vsl-progress__fill" id="vslProgressFill"></div>
+    </div>
+  </div>
+
+  <!-- CTA / OFERTA (libera aos 5s) -->
+  <div id="oferta" class="cta-hide">
+    <a href="#checkout" class="cta-btn">🔥 Quero Começar Agora</a>
+  </div>
+</section>
+
+<style>
+  .vsl-wrap{position:relative;max-width:900px;margin:0 auto}
+  .stream-player{width:100%;aspect-ratio:16/9;border-radius:12px;display:block;box-shadow:0 0 40px rgba(0,0,0,.6)}
+  .vsl-progress{
+    position:absolute;left:0;right:0;bottom:0;height:8px;background:rgba(255,255,255,.12);
+    border-radius:999px;overflow:hidden;margin:12px
+  }
+  .vsl-progress__fill{width:0%;height:100%;background:#EE4D2D;transition:width .25s linear}
+
+  #oferta{max-width:900px;margin:18px auto 24px;text-align:center}
+  .cta-hide{opacity:0;pointer-events:none;transform:translateY(6px);transition:opacity .4s, transform .4s}
+  .cta-show{opacity:1;pointer-events:auto;transform:translateY(0)}
+  .cta-btn{
+    display:inline-block;background:#EE4D2D;color:#fff;font-size:22px;font-weight:800;text-decoration:none;
+    padding:18px 36px;border-radius:12px;animation:pulse 1.8s infinite
+  }
+  @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+</style>
+
+<script>
+(function(){
+  const player = document.getElementById('streamPlayer');
+  const fill   = document.getElementById('vslProgressFill');
+  const oferta = document.getElementById('oferta');
+
+  // ✅ tempo para liberar (em segundos)
+  const CTA_DELAY_SECONDS = 5;
+
+  let duration = 0, showedCTA = false;
+
+  player.addEventListener('loadedmetadata', (e) => {
+    duration = e.detail?.duration || 0;
+    // força autoplay em mobile
+    player.play?.().catch(()=>{ try{ player.muted = true; player.play(); }catch(e){} });
+  });
+
+  player.addEventListener('timeupdate', (e) => {
+    const cur = e.detail?.currentTime || 0;
+    const dur = e.detail?.duration || duration || 0.0001;
+
+    // barra de progresso
+    const pct = Math.min(100, Math.max(0, (cur/dur)*100));
+    fill.style.width = pct + '%';
+
+    // liberar CTA aos 5s
+    if (!showedCTA && cur >= CTA_DELAY_SECONDS) {
+      showedCTA = true;
+      oferta.classList.remove('cta-hide');
+      oferta.classList.add('cta-show');
+      // opcional: rolar suavemente até o CTA
+      // oferta.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+  });
+})();
+</script>
