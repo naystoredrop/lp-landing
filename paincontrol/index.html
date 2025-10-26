@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html lang="es" dir="ltr">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>PainControl — Español</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex,nofollow">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
 
+  <!-- =================== ESTILOS (layout igual ao produtor) =================== -->
   <style>
     :root{
-      --red:#c40000;           /* barra topo */
+      --red:#c40000;  /* faixa topo */
       --headline:#000;
-      --highlight:#ffbf2a;     /* “Milagro Amarillo” */
-      --card-bg:#f8eddc;       /* bege dos cards */
+      --highlight:#ffbf2a; /* “Milagro Amarillo” */
+      --card-bg:#f8eddc;   /* bege dos cards */
       --tab-orange:#ffa62b;
       --tab-red:#e14f2d;
       --tab-green:#14a44d;
       --text:#2b2b2b;
       --muted:#6b6b6b;
-      --btn1:#5fd67d;          /* botão verde degradê */
+      --btn1:#5fd67d;      /* botão verde degradê */
       --btn2:#2e9e4a;
       --borda:#e8d7bf;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--headline);background:#fff}
-    .topbar{background:var(--red);color:#fff;font-weight:700;text-align:center;padding:10px 12px}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family: "Noto Sans", Arial, Helvetica, sans-serif;color:var(--headline);background:#fff}
+    .topbar{background:var(--red);color:#fff;font-weight:800;text-align:center;padding:10px 12px}
     .wrap{max-width:1100px;margin:0 auto;padding:22px 16px}
     h1{font-size:56px;line-height:1.05;margin:18px 0 10px;text-align:center}
     @media(max-width:900px){h1{font-size:38px}}
@@ -45,7 +47,7 @@
     .tab.red{background:var(--tab-red)}
     .tab.green{background:var(--tab-green)}
     .card-in{padding:22px}
-    .card h3{margin:10px 0 0;color:#2b2b2b;font-size:28px}
+    .card h3{margin:10px 0 0;color:var(--text);font-size:28px}
     .img-wrap{display:flex;justify-content:center;margin:16px 0}
     .img{width:220px;height:auto;border-radius:8px;background:#fff;border:1px solid #e9dcc7}
     .price{font-size:42px;font-weight:800;margin:8px 0}
@@ -62,32 +64,33 @@
     .footer{color:#666;text-align:center;font-size:12px;margin:18px 0}
   </style>
 
-  <!-- Seu Meta Pixel -->
+  <!-- =================== SEU META PIXEL =================== -->
   <script>
     !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init','704776715751233');   // Pixel Achadinhos Shopee
+    fbq('init','704776715751233');   // Pixel Achadinhos Shopee (seu)
     fbq('track','PageView');
   </script>
   <noscript><img alt="" height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=704776715751233&ev=PageView&noscript=1"/></noscript>
+  <!-- ===================================================== -->
 </head>
 <body>
 
-  <!-- Barra topo -->
+  <!-- Faixa topo (igual à do produtor) -->
   <div class="topbar">Doctor descubre cómo detener el dolor nervioso!</div>
 
+  <!-- Headline -->
   <div class="wrap">
-    <!-- Headline -->
     <h1>
       La vitamina apodada el <span class="hl">“Milagro Amarillo”</span><br>
-      podría eliminar por completo el<br>dolor por neuropatía.
+      podría eliminar por completo el<br/>dolor por neuropatía.
     </h1>
 
-    <!-- VSL -->
+    <!-- VSL (SEU Cloudflare Stream) -->
     <div class="vsl">
       <div class="ratio">
         <iframe
@@ -98,7 +101,7 @@
     </div>
   </div>
 
-  <!-- Ofertas -->
+  <!-- Seção de Ofertas (3 cards em bege, abas coloridas, botão verde) -->
   <div id="potes" class="wrap">
     <div class="grid">
 
@@ -113,7 +116,7 @@
           <div class="line">Total = <span class="strike">$179</span> $89</div>
           <div class="line"><b>+$9,99</b> Envío y manipulación</div>
           <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120187:1?afid=kTJX9csP7C">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
             Añadir al carrito
           </a>
           <div class="badges">
@@ -134,7 +137,7 @@
           <div class="line">Total = <span class="strike">$1.074</span> $294</div>
           <div class="line"><b>FREE</b> Envío y manipulación</div>
           <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120190:1?afid=kTJX9csP7C">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
             Añadir al carrito
           </a>
           <div class="badges">
@@ -155,7 +158,7 @@
           <div class="line">Total = <span class="strike">$537</span> $177</div>
           <div class="line"><b>FREE</b> Envío y manipulación</div>
           <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120189:1?afid=kTJX9csP7C">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
             Añadir al carrito
           </a>
           <div class="badges">
@@ -171,6 +174,7 @@
     <p class="footer">© <span id="yr"></span> Todos los derechos reservados.</p>
   </div>
 
+  <!-- =================== SCRIPTS =================== -->
   <script>
     // Ano no rodapé
     document.getElementById('yr').textContent = new Date().getFullYear();
