@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
 
-  <!-- ================== ESTILOS ================== -->
   <style>
     :root{
       --red:#c40000;           /* barra topo */
@@ -18,8 +17,8 @@
       --tab-green:#14a44d;
       --text:#2b2b2b;
       --muted:#6b6b6b;
-      --btn1:#4dbf6b;          /* botão verde degradê */
-      --btn2:#2f9d4a;
+      --btn1:#5fd67d;          /* botão verde degradê */
+      --btn2:#2e9e4a;
       --borda:#e8d7bf;
     }
     *{box-sizing:border-box}
@@ -30,13 +29,13 @@
     @media(max-width:900px){h1{font-size:38px}}
     .hl{color:#000;background:var(--highlight);padding:0 .18em;border-radius:.15em}
     .lead{font-size:18px;color:#333;text-align:center;margin:0 0 18px}
+
     /* VSL */
     .vsl{max-width:860px;margin:26px auto;border-radius:6px;overflow:hidden}
     .ratio{position:relative;padding-top:56.25%;background:#111}
     .ratio iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-    /* âncora seção potes */
-    .anchor-btn{display:inline-block;margin:10px auto 0;padding:10px 16px;border-radius:6px;background:#111;color:#fff;text-decoration:none}
-    /* Cards de oferta */
+
+    /* Cards */
     #potes{scroll-margin-top:60px}
     .grid{display:grid;gap:26px;margin:42px auto;max-width:1100px}
     @media(min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
@@ -48,45 +47,41 @@
     .card-in{padding:22px}
     .card h3{margin:10px 0 0;color:#2b2b2b;font-size:28px}
     .img-wrap{display:flex;justify-content:center;margin:16px 0}
-    .img{width:220px;height:220px;border-radius:8px;background:linear-gradient(135deg,#edf6ee,#f8f1e8);border:1px solid #e9dcc7}
+    .img{width:220px;height:auto;border-radius:8px;background:#fff;border:1px solid #e9dcc7}
     .price{font-size:42px;font-weight:800;margin:8px 0}
     .line{font-size:16px;color:#5a5a5a;margin:4px 0}
     .strike{color:#775b3a;text-decoration:line-through}
     .btn{display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;
-         background:linear-gradient(#5fd67d,#2e9e4a);color:#fff;border-radius:12px;
+         background:linear-gradient(var(--btn1),var(--btn2));color:#fff;border-radius:12px;
          padding:16px 18px;font-weight:800;font-size:22px;margin-top:12px;box-shadow:0 8px 22px rgba(20,164,77,.25)}
     .btn:hover{filter:brightness(1.03)}
     .btn svg{width:26px;height:26px;flex:0 0 26px}
     .badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px 0 6px}
     .badge{height:22px;padding:0 8px;border-radius:4px;background:#fff;border:1px solid #ddd;color:#555;font-size:12px;display:flex;align-items:center}
     .shipping{font-size:14px;color:#333;text-align:center;margin-top:12px}
-    .guarantee{max-width:900px;margin:22px auto 6px;text-align:center;color:#333}
     .footer{color:#666;text-align:center;font-size:12px;margin:18px 0}
-    /* esconder imgs se não definir URLs */
-    .img[data-src=""]{display:none}
   </style>
 
-  <!-- ============== SEU META PIXEL ============== -->
+  <!-- Seu Meta Pixel -->
   <script>
     !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init','704776715751233');   // Pixel Achadinhos Shopee (seu)
+    fbq('init','704776715751233');   // Pixel Achadinhos Shopee
     fbq('track','PageView');
   </script>
   <noscript><img alt="" height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=704776715751233&ev=PageView&noscript=1"/></noscript>
-  <!-- ============================================ -->
 </head>
 <body>
 
-  <!-- TOP BAR -->
+  <!-- Barra topo -->
   <div class="topbar">Doctor descubre cómo detener el dolor nervioso!</div>
 
   <div class="wrap">
-    <!-- HEADLINE -->
+    <!-- Headline -->
     <h1>
       La vitamina apodada el <span class="hl">“Milagro Amarillo”</span><br>
       podría eliminar por completo el<br>dolor por neuropatía.
@@ -101,13 +96,9 @@
         </iframe>
       </div>
     </div>
-
-    <div style="text-align:center">
-      <a class="anchor-btn" href="#potes">Bajar a las ofertas ↓</a>
-    </div>
   </div>
 
-  <!-- OFERTAS -->
+  <!-- Ofertas -->
   <div id="potes" class="wrap">
     <div class="grid">
 
@@ -116,13 +107,12 @@
         <div class="tab orange">1 botella</div>
         <div class="card-in">
           <h3>Buena oferta</h3>
-          <div class="img-wrap"><img class="img" data-src="" alt="1 botella"></div>
+          <div class="img-wrap"><img class="img" src="./1.png" alt="1 botella"></div>
           <div class="line">Precio regular: <span class="strike">$179</span></div>
           <div class="price">$89 <span style="font-size:20px;font-weight:600">/Botella</span></div>
           <div class="line">Total = <span class="strike">$179</span> $89</div>
           <div class="line"><b>+$9,99</b> Envío y manipulación</div>
           <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120187:1?afid=kTJX9csP7C">
-            <!-- ícone carrinho -->
             <svg viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
             Añadir al carrito
           </a>
@@ -133,12 +123,12 @@
         </div>
       </div>
 
-      <!-- 6 botellas (destaque central vermelho) -->
+      <!-- 6 botellas (destaque vermelho) -->
       <div class="card">
         <div class="tab red">6 botellas</div>
         <div class="card-in">
           <h3 style="color:#0a7a36">Mejor oferta</h3>
-          <div class="img-wrap"><img class="img" data-src="" alt="6 botellas"></div>
+          <div class="img-wrap"><img class="img" src="./6.png" alt="6 botellas"></div>
           <div class="line">Precio regular: <span class="strike">$1.074</span></div>
           <div class="price">$49 <span style="font-size:20px;font-weight:600">/Botella</span></div>
           <div class="line">Total = <span class="strike">$1.074</span> $294</div>
@@ -159,7 +149,7 @@
         <div class="tab orange">3 botellas</div>
         <div class="card-in">
           <h3>Buen valor</h3>
-          <div class="img-wrap"><img class="img" data-src="" alt="3 botellas"></div>
+          <div class="img-wrap"><img class="img" src="./3.png" alt="3 botellas"></div>
           <div class="line">Precio regular: <span class="strike">$537</span></div>
           <div class="price">$59 <span style="font-size:20px;font-weight:600">/Botella</span></div>
           <div class="line">Total = <span class="strike">$537</span> $177</div>
@@ -181,12 +171,11 @@
     <p class="footer">© <span id="yr"></span> Todos los derechos reservados.</p>
   </div>
 
-  <!-- ================== SCRIPTS ================== -->
   <script>
-    // 1) Injeta o ano no rodapé
+    // Ano no rodapé
     document.getElementById('yr').textContent = new Date().getFullYear();
 
-    // 2) UTMs → passam para os botões SEM perder seu afid
+    // UTMs → passam pros botões mantendo seu afid
     (function(){
       const params = new URLSearchParams(location.search);
       if(!params.get('utm_source'))   params.set('utm_source','facebook');
@@ -199,20 +188,10 @@
       document.querySelectorAll('.cta').forEach(a=>{
         const base = a.getAttribute('data-base');
         const url = new URL(base);
-        params.forEach((v,k)=>url.searchParams.set(k,v)); // mantém afid e adiciona UTMs
+        params.forEach((v,k)=>url.searchParams.set(k,v)); // mantém afid + adiciona UTMs
         a.href = url.toString();
         a.addEventListener('click',()=>{ if(window.fbq) fbq('track','InitiateCheckout'); });
       });
-
-      // 3) (Opcional) defina URLs das imagens via query (?img1=...&img3=...&img6=...)
-      const img1=params.get('img1')||'';
-      const img3=params.get('img3')||'';
-      const img6=params.get('img6')||'';
-      const imgs=document.querySelectorAll('.img');
-      if(imgs[0]) imgs[0].src = img1;
-      if(imgs[1]) imgs[1].src = img6;
-      if(imgs[2]) imgs[2].src = img3;
-      imgs.forEach(el=>{ el.setAttribute('data-src',el.src||''); });
     })();
   </script>
 </body>
