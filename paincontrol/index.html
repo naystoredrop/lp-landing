@@ -2,119 +2,217 @@
 <html lang="es" dir="ltr">
 <head>
   <meta charset="utf-8">
-  <title>PainControl – Video</title>
+  <title>PainControl — Español</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="Doctor descubre cómo detener el dolor nervioso. Mira el video y elige tu oferta.">
-  <link rel="icon" href="data:,">
+  <meta name="robots" content="noindex,nofollow">
+
+  <!-- ================== ESTILOS ================== -->
   <style>
-    :root{--bg:#0b0b0b;--card:#111;--txt:#f5f5f5;--muted:#c9c9c9;--accent:#1dd1a1;}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}
-    body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif}
-    .wrap{max-width:960px;margin:0 auto;padding:20px}
-    .vsl{position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;margin:12px 0 20px}
-    .vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
-    .grid{display:grid;gap:14px}
-    @media(min-width:720px){.grid{grid-template-columns:repeat(3,1fr)}}
-    .card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
-    .pill{display:inline-block;background:rgba(255,255,255,.08);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
-    .price{font-size:28px;font-weight:700;line-height:1}
-    .note{font-size:12px;color:var(--muted)}
-    .btn{display:inline-flex;justify-content:center;align-items:center;gap:8px;text-align:center;
-         font-weight:700;text-decoration:none;background:var(--accent);color:#091f16;border-radius:12px;
-         padding:14px 16px;transition:.2s transform;box-shadow:0 6px 20px rgba(29,209,161,.25)}
-    .btn:hover{transform:translateY(-1px)}
-    .trust{margin-top:22px;font-size:12px;color:var(--muted);text-align:center}
-    .footer{margin:28px 0 12px;text-align:center;color:var(--muted);font-size:12px}
+    :root{
+      --red:#c40000;           /* barra topo */
+      --headline:#000;
+      --highlight:#ffbf2a;     /* “Milagro Amarillo” */
+      --card-bg:#f8eddc;       /* bege dos cards */
+      --tab-orange:#ffa62b;
+      --tab-red:#e14f2d;
+      --tab-green:#14a44d;
+      --text:#2b2b2b;
+      --muted:#6b6b6b;
+      --btn1:#4dbf6b;          /* botão verde degradê */
+      --btn2:#2f9d4a;
+      --borda:#e8d7bf;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;color:var(--headline);background:#fff}
+    .topbar{background:var(--red);color:#fff;font-weight:700;text-align:center;padding:10px 12px}
+    .wrap{max-width:1100px;margin:0 auto;padding:22px 16px}
+    h1{font-size:56px;line-height:1.05;margin:18px 0 10px;text-align:center}
+    @media(max-width:900px){h1{font-size:38px}}
+    .hl{color:#000;background:var(--highlight);padding:0 .18em;border-radius:.15em}
+    .lead{font-size:18px;color:#333;text-align:center;margin:0 0 18px}
+    /* VSL */
+    .vsl{max-width:860px;margin:26px auto;border-radius:6px;overflow:hidden}
+    .ratio{position:relative;padding-top:56.25%;background:#111}
+    .ratio iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    /* âncora seção potes */
+    .anchor-btn{display:inline-block;margin:10px auto 0;padding:10px 16px;border-radius:6px;background:#111;color:#fff;text-decoration:none}
+    /* Cards de oferta */
+    #potes{scroll-margin-top:60px}
+    .grid{display:grid;gap:26px;margin:42px auto;max-width:1100px}
+    @media(min-width:960px){.grid{grid-template-columns:repeat(3,1fr)}}
+    .card{background:var(--card-bg);border:2px solid var(--borda);border-radius:22px;overflow:hidden}
+    .tab{height:64px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:26px}
+    .tab.orange{background:var(--tab-orange)}
+    .tab.red{background:var(--tab-red)}
+    .tab.green{background:var(--tab-green)}
+    .card-in{padding:22px}
+    .card h3{margin:10px 0 0;color:#2b2b2b;font-size:28px}
+    .img-wrap{display:flex;justify-content:center;margin:16px 0}
+    .img{width:220px;height:220px;border-radius:8px;background:linear-gradient(135deg,#edf6ee,#f8f1e8);border:1px solid #e9dcc7}
+    .price{font-size:42px;font-weight:800;margin:8px 0}
+    .line{font-size:16px;color:#5a5a5a;margin:4px 0}
+    .strike{color:#775b3a;text-decoration:line-through}
+    .btn{display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;
+         background:linear-gradient(#5fd67d,#2e9e4a);color:#fff;border-radius:12px;
+         padding:16px 18px;font-weight:800;font-size:22px;margin-top:12px;box-shadow:0 8px 22px rgba(20,164,77,.25)}
+    .btn:hover{filter:brightness(1.03)}
+    .btn svg{width:26px;height:26px;flex:0 0 26px}
+    .badges{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px 0 6px}
+    .badge{height:22px;padding:0 8px;border-radius:4px;background:#fff;border:1px solid #ddd;color:#555;font-size:12px;display:flex;align-items:center}
+    .shipping{font-size:14px;color:#333;text-align:center;margin-top:12px}
+    .guarantee{max-width:900px;margin:22px auto 6px;text-align:center;color:#333}
+    .footer{color:#666;text-align:center;font-size:12px;margin:18px 0}
+    /* esconder imgs se não definir URLs */
+    .img[data-src=""]{display:none}
   </style>
 
-  <!-- Meta Pixel (SEU) -->
+  <!-- ============== SEU META PIXEL ============== -->
   <script>
     !(function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
     n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
     n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
     t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)})(window,document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init','704776715751233'); // Pixel Achadinhos Shopee (seu)
+    fbq('init','704776715751233');   // Pixel Achadinhos Shopee (seu)
     fbq('track','PageView');
   </script>
   <noscript><img alt="" height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=704776715751233&ev=PageView&noscript=1"/></noscript>
-  <!-- FIM Pixel -->
+  <!-- ============================================ -->
 </head>
 <body>
+
+  <!-- TOP BAR -->
+  <div class="topbar">Doctor descubre cómo detener el dolor nervioso!</div>
+
   <div class="wrap">
-    <h1 style="margin:8px 0 4px;font-size:28px;">Doctor descubre cómo detener el dolor nervioso</h1>
-    <div class="note">Mira el video y elige tu mejor oferta.</div>
+    <!-- HEADLINE -->
+    <h1>
+      La vitamina apodada el <span class="hl">“Milagro Amarillo”</span><br>
+      podría eliminar por completo el<br>dolor por neuropatía.
+    </h1>
 
     <!-- VSL -->
     <div class="vsl">
-      <iframe
-        src="https://customer-b2gdb94hrid04n5r.cloudflarestream.com/10d249a46e42039201d0fec47f6d1f5b/iframe?poster=https%3A%2F%2Fcustomer-b2gdb94hrid04n5r.cloudflarestream.com%2F10d249a46e42039201d0fec47f6d1f5b%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
-        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;" allowfullscreen>
-      </iframe>
+      <div class="ratio">
+        <iframe
+          src="https://customer-b2gdb94hrid04n5r.cloudflarestream.com/10d249a46e42039201d0fec47f6d1f5b/iframe?poster=https%3A%2F%2Fcustomer-b2gdb94hrid04n5r.cloudflarestream.com%2F10d249a46e42039201d0fec47f6d1f5b%2Fthumbnails%2Fthumbnail.jpg%3Ftime%3D%26height%3D600"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture" allowfullscreen>
+        </iframe>
+      </div>
     </div>
 
-    <!-- OFERTAS -->
-    <div class="grid" id="ofertas">
+    <div style="text-align:center">
+      <a class="anchor-btn" href="#potes">Bajar a las ofertas ↓</a>
+    </div>
+  </div>
+
+  <!-- OFERTAS -->
+  <div id="potes" class="wrap">
+    <div class="grid">
+
       <!-- 1 botella -->
       <div class="card">
-        <span class="pill">Buena oferta</span>
-        <div class="price">1 botella</div>
-        <div class="note">Entrega rápida. Garantía 60 días.</div>
-        <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120187:1?afid=kTJX9csP7C">
-          Comprar 1 botella
-        </a>
+        <div class="tab orange">1 botella</div>
+        <div class="card-in">
+          <h3>Buena oferta</h3>
+          <div class="img-wrap"><img class="img" data-src="" alt="1 botella"></div>
+          <div class="line">Precio regular: <span class="strike">$179</span></div>
+          <div class="price">$89 <span style="font-size:20px;font-weight:600">/Botella</span></div>
+          <div class="line">Total = <span class="strike">$179</span> $89</div>
+          <div class="line"><b>+$9,99</b> Envío y manipulación</div>
+          <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120187:1?afid=kTJX9csP7C">
+            <!-- ícone carrinho -->
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
+            Añadir al carrito
+          </a>
+          <div class="badges">
+            <span class="badge">VISA</span><span class="badge">Mastercard</span>
+            <span class="badge">Amex</span><span class="badge">Discover</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 botellas (destaque central vermelho) -->
+      <div class="card">
+        <div class="tab red">6 botellas</div>
+        <div class="card-in">
+          <h3 style="color:#0a7a36">Mejor oferta</h3>
+          <div class="img-wrap"><img class="img" data-src="" alt="6 botellas"></div>
+          <div class="line">Precio regular: <span class="strike">$1.074</span></div>
+          <div class="price">$49 <span style="font-size:20px;font-weight:600">/Botella</span></div>
+          <div class="line">Total = <span class="strike">$1.074</span> $294</div>
+          <div class="line"><b>FREE</b> Envío y manipulación</div>
+          <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120190:1?afid=kTJX9csP7C">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
+            Añadir al carrito
+          </a>
+          <div class="badges">
+            <span class="badge">VISA</span><span class="badge">Mastercard</span>
+            <span class="badge">Amex</span><span class="badge">Discover</span>
+          </div>
+        </div>
       </div>
 
       <!-- 3 botellas -->
       <div class="card">
-        <span class="pill">Buen valor</span>
-        <div class="price">3 botellas</div>
-        <div class="note">Ahorra más. Envío reducido.</div>
-        <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120189:1?afid=kTJX9csP7C">
-          Comprar 3 botellas
-        </a>
+        <div class="tab orange">3 botellas</div>
+        <div class="card-in">
+          <h3>Buen valor</h3>
+          <div class="img-wrap"><img class="img" data-src="" alt="3 botellas"></div>
+          <div class="line">Precio regular: <span class="strike">$537</span></div>
+          <div class="price">$59 <span style="font-size:20px;font-weight:600">/Botella</span></div>
+          <div class="line">Total = <span class="strike">$537</span> $177</div>
+          <div class="line"><b>FREE</b> Envío y manipulación</div>
+          <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120189:1?afid=kTJX9csP7C">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M6 6h15l-2 8H8L6 6z" stroke="#fff" stroke-width="2"/><circle cx="9" cy="20" r="2" fill="#fff"/><circle cx="18" cy="20" r="2" fill="#fff"/></svg>
+            Añadir al carrito
+          </a>
+          <div class="badges">
+            <span class="badge">VISA</span><span class="badge">Mastercard</span>
+            <span class="badge">Amex</span><span class="badge">Discover</span>
+          </div>
+        </div>
       </div>
 
-      <!-- 6 botellas -->
-      <div class="card">
-        <span class="pill">Mejor oferta</span>
-        <div class="price">6 botellas</div>
-        <div class="note">Máximo descuento.</div>
-        <a class="btn cta" data-base="https://nutragreen.mycartpanda.com/checkout/178120190:1?afid=kTJX9csP7C">
-          Comprar 6 botellas
-        </a>
-      </div>
     </div>
 
-    <div class="trust">100% satisfacción garantizada – 60 días de garantía.</div>
-    <div class="footer">© <span id="yr"></span> Todos los derechos reservados.</div>
+    <p class="shipping">100% satisfacción garantizada — 60 días de garantía.</p>
+    <p class="footer">© <span id="yr"></span> Todos los derechos reservados.</p>
   </div>
 
+  <!-- ================== SCRIPTS ================== -->
   <script>
-    // util: pega query params e concatena nas URLs dos CTAs
-    (function() {
-      const params = new URLSearchParams(window.location.search);
-      // Boas práticas: aplica UTMs default se não vierem do anúncio
-      if (!params.get('utm_source')) params.set('utm_source','facebook');
-      if (!params.get('utm_medium')) params.set('utm_medium','cpc');
-      if (!params.get('utm_campaign')) params.set('utm_campaign','paincontrol_es_50plus_ww_excl');
-      if (!params.get('lang')) params.set('lang','es');
-      if (!params.get('age')) params.set('age','50-65plus');
-      if (!params.get('geo_scope')) params.set('geo_scope','worldwide_exclusions');
+    // 1) Injeta o ano no rodapé
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // 2) UTMs → passam para os botões SEM perder seu afid
+    (function(){
+      const params = new URLSearchParams(location.search);
+      if(!params.get('utm_source'))   params.set('utm_source','facebook');
+      if(!params.get('utm_medium'))   params.set('utm_medium','cpc');
+      if(!params.get('utm_campaign')) params.set('utm_campaign','paincontrol_es_50plus_ww_excl');
+      if(!params.get('lang'))         params.set('lang','es');
+      if(!params.get('age'))          params.set('age','50-65plus');
+      if(!params.get('geo_scope'))    params.set('geo_scope','worldwide_exclusions');
 
       document.querySelectorAll('.cta').forEach(a=>{
         const base = a.getAttribute('data-base');
         const url = new URL(base);
-        // mantém afid do afiliado e adiciona UTMs
-        params.forEach((v,k)=>url.searchParams.set(k,v));
+        params.forEach((v,k)=>url.searchParams.set(k,v)); // mantém afid e adiciona UTMs
         a.href = url.toString();
-        a.addEventListener('click', ()=> {
-          if (typeof fbq === 'function') fbq('track','InitiateCheckout');
-        });
+        a.addEventListener('click',()=>{ if(window.fbq) fbq('track','InitiateCheckout'); });
       });
-      document.getElementById('yr').textContent = new Date().getFullYear();
+
+      // 3) (Opcional) defina URLs das imagens via query (?img1=...&img3=...&img6=...)
+      const img1=params.get('img1')||'';
+      const img3=params.get('img3')||'';
+      const img6=params.get('img6')||'';
+      const imgs=document.querySelectorAll('.img');
+      if(imgs[0]) imgs[0].src = img1;
+      if(imgs[1]) imgs[1].src = img6;
+      if(imgs[2]) imgs[2].src = img3;
+      imgs.forEach(el=>{ el.setAttribute('data-src',el.src||''); });
     })();
   </script>
 </body>
