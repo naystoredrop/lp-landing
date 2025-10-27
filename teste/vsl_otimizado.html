@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VSL</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <!-- hls.js para tocar o manifesto HLS da Cloudflare -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <style>
+    :root{ --brand:#ff6a00; --bg:#000; --fg:#fff; }
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
+    body{
+      margin:0; padding:0; background:var(--bg); color:var(--fg);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      /* Sem respiros: full-bleed */
+    }
+    .wrap{ width:100%; max-width:none; margin:0; }
+
+    /* PLAYER: sem aspecto fixo, sem sombra, sem borda arredondada */
+    .vsl{
+      position:relative;
+      width:100%;
+      height:auto; /* altura definida dinamicamente via JS */
+      background:#000;
+      overflow:hidden;
+    }
+    video{
+      position:absolute; inset:0;
+      width:100%; height:100%;
+      background:#000;
+      object-fit:contain; /* nunca corta nem estica */
+      border:0; display:block;
+    }
+
+    /* CAPA 1 — GIF (start) */
+    .cover{
+      position:absolute; inset:0; z-index:10;
+      display:flex; align-items:center; justify-content:center;
+      transition:opacity .25s ease;
+    }
+    .cover.hide{ opacity:0; pointer-events:none }
+    .cover img{
+      width:100%; height:100%; object-fit:contain; display:block; cursor:pointer;
+      user-select:none; -webkit-user-drag:none;
+      background:#000;
+    }
+
+    /* CAPA 2 — PNG (retomar) com botões */
+    .resume{
+      position:absolute; inset:0; z-index:11; display:none;
+      background:url('capathumilaicontinuar.png') center/contain no-repeat #000;
+    }
+    .resume.show{ display:block }
+    .actions{
+      position:absolute; left:0; right:0; bottom:8%;
+      display:flex; gap:12px; justify-content:center; flex-wrap:wrap; padding:0 16px;
+    }
+    .btn{
+      padding:12px 18px; border-radius:999px; border:2px solid transparent;
+      font-weight:800; font-size:18px; cursor:pointer;
+      background:#111; color:#fff;
+    }
+    .btn-primary{ background:var(--brand); color:#000 }
+    .btn-ghost{ background:#00000088; color:#fff; border-color:#ffffff44 }
+
+    /* Barra estilo VTurb (sem sombra) */
+    .progress{
+      position:absolute; left:0; right:0; bottom:0; z-index:5;
+      height:8px; background:rgba(255,255,255,.12);
+      pointer-events:none;
+    }
+    .progress span{
+      display:block; height:100%; width:0%;
+      background:linear-gradient(90deg,#ff6a00,#ffb347);
+      transition:width .18s ease-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="vsl" id="vslBox">
+      <!-- Vídeo real (HLS) -->
+      <video id="vsl" playsinline webkit-playsinline preload="metadata"></video>
+
+      <!-- CAPA 1: GIF -->
+      <div class="cover" id="cover">
+        <img src="capathumilai.gif" alt="Clique para iniciar com som">
+      </div>
+
+      <!-- CAPA 2: PNG (retomar) -->
+      <div class="resume" id="resume">
+        <div class="actions">
+          <button class="btn btn-primary" id="btnContinue">▶ Continuar assistindo</button>
+          <button class="btn btn-ghost" id="btnRestart">↻ Ver desde o início</button>
+        </div>
+      </div>
+
+      <!-- Barra -->
+      <div class="progress"><span id="bar"></span></div>
+    </div>
+  </div>
+
+  <script>
+    /************* CONFIG *************/
+    const VIDEO_ID = '10d249a46e42039201d0fec47f6d1f5b';
+    const CUSTOMER_SUB = 'customer-b2gdb94hrid04n5r.cloudflarestream.com';
+    const HLS_SRC = `https://${CUSTOMER_SUB}/${VIDEO_ID}/manifest/video.m3u8`;
+    const RESUME_KEY = `vsl:${VIDEO_ID}:time`;
+    const OFFER_AFTER = 15;   // só oferece "continuar" após 15s assistidos
+    /**********************************/
+
+    const video = document.getElementById('vsl');
+    const cover = document.getElementById('cover');
+    const resume = document.getElementById('resume');
+    const btnContinue = document.getElementById('btnContinue');
+    const btnRestart  = document.getElementById('btnRestart');
+    const bar = document.getElementById('bar');
+    const box = document.getElementById('vslBox');
+
+    // helpers
+    const getSaved  = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
+    const saveTime  = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
+    const clearTime = () => localStorage.removeItem(RESUME_KEY);
+
+    // ---- Ajuste DINÂMICO de proporção com base no vídeo real ----
+    let ratio = null; // videoHeight / videoWidth
+    function applyBoxHeight(){
+      // Garante largura atual e define altura proporcional
+      const w = box.clientWidth || window.innerWidth;
+      if (!ratio || !isFinite(ratio) || ratio <= 0) return; // aguarda metadata
+      box.style.height = (w * ratio) + 'px';
+    }
+    function computeAndApplyRatio(){
+      if (video.videoWidth > 0 && video.videoHeight > 0){
+        ratio = video.videoHeight / video.videoWidth;
+        applyBoxHeight();
+      }
+    }
+    // ResizeObserver para reagir a mudanças de largura do container
+    const ro = new ResizeObserver(applyBoxHeight);
+    ro.observe(box);
+    window.addEventListener('orientationchange', applyBoxHeight);
+
+    // Carrega HLS e inicia no ponto desejado
+    function loadAndPlay(startSec){
+      const startAt = Math.max(0, Number(startSec)||0);
+
+      function setStartAndPlay(){
+        // Define altura assim que as metadatas estiverem disponíveis
+        const onMeta = () => {
+          computeAndApplyRatio();
+          try { video.currentTime = startAt; } catch(_) {}
+          video.muted = false;
+          video.play().catch(()=>{});
+        };
+        if (video.readyState >= 1) { onMeta(); }
+        else video.addEventListener('loadedmetadata', onMeta, { once:true });
+      }
+
+      if (Hls.isSupported()){
+        const hls = new Hls({lowLatencyMode:false});
+        hls.loadSource(HLS_SRC);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, setStartAndPlay);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')){
+        // Safari iOS/macOS toca HLS nativo
+        video.src = HLS_SRC;
+        setStartAndPlay();
+      } else {
+        // fallback (raro)
+        video.src = HLS_SRC;
+        setStartAndPlay();
+      }
+    }
+
+    // Decide capa ao abrir
+    (function init(){
+      // Sem gutters laterais já garantidos via CSS
+      const s = getSaved();
+      if (s >= OFFER_AFTER){
+        cover.classList.add('hide');
+        resume.classList.add('show');
+      } else {
+        resume.classList.remove('show');
+        cover.classList.remove('hide');
+      }
+    })();
+
+    // Capa 1 (GIF) → iniciar do zero
+    cover.addEventListener('click', ()=>{
+      cover.classList.add('hide');
+      resume.classList.remove('show');
+      loadAndPlay(0);
+    }, {once:true});
+
+    // Capa 2 (PNG) → continuar/reiniciar
+    btnContinue.addEventListener('click', ()=>{
+      resume.classList.remove('show');
+      loadAndPlay(getSaved());
+    });
+    btnRestart.addEventListener('click', ()=>{
+      clearTime();
+      resume.classList.remove('show');
+      loadAndPlay(0);
+    });
+
+    // Barra + salvamento com tempo REAL
+    video.addEventListener('timeupdate', ()=>{
+      const t = Number(video.currentTime)||0;
+      const d = Number(video.duration)||1;
+      bar.style.width = Math.min(100, (t/d)*100).toFixed(2) + '%';
+      if (!video.paused) saveTime(t);
+    });
+
+    video.addEventListener('loadedmetadata', computeAndApplyRatio);
+    window.addEventListener('resize', applyBoxHeight);
+
+    video.addEventListener('ended', ()=>{
+      bar.style.width = '100%';
+      clearTime();
+    });
+
+    window.addEventListener('beforeunload', ()=>{
+      saveTime(Number(video.currentTime)||0);
+    });
+  </script>
+</body>
+</html>
