@@ -3,49 +3,81 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VSL</title>
+  <title>VSL Alta Conversión</title>
   <meta name="robots" content="noindex,nofollow" />
   <style>
-    :root{ --brand:#ff6a00; --bg:#000; --fg:#fff; }
+    :root{
+      --brand:#ff6a00;
+      --bg:#000;
+      --fg:#fff;
+    }
     *{box-sizing:border-box}
-    body{ margin:0; background:var(--bg); color:var(--fg);
+    body{
+      margin:0; background:var(--bg); color:var(--fg);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      display:flex; justify-content:center; min-height:100vh; padding:16px }
-    .wrap{ width:min(100%,900px); margin:auto }
-    /* Caixa do player no MODELO do teu snippet: 9:16 (vertical) */
-    #vsl-box{ position:relative; width:100%; padding-top:177.7777777778%; border-radius:16px; overflow:hidden; background:#000; }
-    #vsl-box iframe{ border:none; position:absolute; top:0; left:0; width:100%; height:100% }
+      display:flex; justify-content:center; min-height:100vh; padding:16px;
+    }
+    .wrap{width:min(100%,900px); margin:auto}
+    #vsl-box{
+      position:relative; width:100%; padding-top:177.7777777778%;
+      border-radius:16px; overflow:hidden; background:#000;
+      box-shadow:0 10px 40px rgba(0,0,0,.5);
+    }
+    #vsl-box iframe{
+      border:none; position:absolute; top:0; left:0; width:100%; height:100%;
+    }
     /* Capas */
-    .layer{ position:absolute; inset:0; z-index:10; display:flex; align-items:center; justify-content:center; }
-    .hide{ opacity:0; pointer-events:none }
-    .layer img{ width:100%; height:100%; object-fit:cover; user-select:none; -webkit-user-drag:none }
-    .tap{ position:absolute; inset:0; cursor:pointer }
-    /* Barra de progresso */
-    .progress{ position:absolute; left:0; right:0; bottom:0; height:6px; background:#ffffff22; z-index:5 }
-    .progress span{ display:block; height:100%; width:0%; background:var(--brand); transition:width .25s linear }
+    .layer{
+      position:absolute; inset:0; z-index:10;
+      display:flex; align-items:center; justify-content:center;
+      transition:opacity .25s ease;
+    }
+    .hide{opacity:0; pointer-events:none}
+    .layer img{
+      width:100%; height:100%; object-fit:cover;
+      user-select:none; -webkit-user-drag:none;
+    }
+    .tap{position:absolute; inset:0; cursor:pointer}
+    /* Barra estilo VTurb */
+    .progress{
+      position:absolute; left:0; right:0; bottom:0;
+      height:8px; background:rgba(255,255,255,.12);
+      box-shadow:0 0 8px rgba(255,106,0,.5);
+      z-index:5;
+    }
+    .progress span{
+      display:block; height:100%; width:0%;
+      background:linear-gradient(90deg,#ff6a00,#ffb347);
+      transition:width .25s ease-out;
+    }
     /* Botões da capa 2 */
-    .actions{ position:absolute; left:0; right:0; bottom:8%; display:flex; gap:12px; justify-content:center; padding:0 16px; flex-wrap:wrap }
-    .btn{ padding:12px 18px; border-radius:999px; border:2px solid transparent; font-weight:800; font-size:18px; cursor:pointer }
-    .btn-primary{ background:var(--brand); color:#000 }
-    .btn-ghost{ background:#00000088; color:#fff; border-color:#ffffff44 }
+    .actions{
+      position:absolute; left:0; right:0; bottom:8%;
+      display:flex; gap:12px; justify-content:center; padding:0 16px; flex-wrap:wrap;
+    }
+    .btn{
+      padding:12px 18px; border-radius:999px; border:2px solid transparent;
+      font-weight:800; font-size:18px; cursor:pointer;
+    }
+    .btn-primary{background:var(--brand); color:#000;}
+    .btn-ghost{background:#00000088; color:#fff; border-color:#ffffff44;}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- Caixa do player (vertical 9:16) -->
     <div id="vsl-box">
-      <!-- Capa 1: GIF para liberar áudio -->
+      <!-- Capa 1: GIF para ativar o som -->
       <div class="layer" id="cover1">
         <img src="capa%20thumilai.gif" alt="Haz clic para escuchar" onerror="this.src='capa%20thumilai.png'">
         <div class="tap" title="Haz clic para escuchar"></div>
       </div>
 
-      <!-- Capa 2: PNG ao voltar/recarregar (continuar ou reiniciar) -->
+      <!-- Capa 2: PNG ao recarregar -->
       <div class="layer hide" id="cover2">
         <img src="capa%20thumilai.png" alt="Continuar o reiniciar">
         <div class="actions">
           <button class="btn btn-primary" id="btnContinue">▶ Continuar viendo</button>
-          <button class="btn btn-ghost"   id="btnRestart">↻ Ver desde el inicio</button>
+          <button class="btn btn-ghost" id="btnRestart">↻ Ver desde el inicio</button>
         </div>
       </div>
 
@@ -58,13 +90,13 @@
     // ================= CONFIG =================
     const VIDEO_ID   = '10d249a46e42039201d0fec47f6d1f5b';
     const RESUME_KEY = `vsl:${VIDEO_ID}:time`;
-    const MIN_SECONDS_TO_OFFER = 15;   // só mostra capa 2 se já assistiu pelo menos isso
-    const VIDEO_DURATION = 1800;       // ajuste para a duração real (segundos) p/ barra ficar precisa
+    const MIN_SECONDS_TO_OFFER = 15;   // tempo mínimo antes de oferecer "continuar"
+    const VIDEO_DURATION = 1800;       // duração estimada (segundos)
     // ==========================================
 
     const box = document.getElementById('vsl-box');
-    const cover1 = document.getElementById('cover1');     // GIF (primeira visita)
-    const cover2 = document.getElementById('cover2');     // PNG (retomada)
+    const cover1 = document.getElementById('cover1');
+    const cover2 = document.getElementById('cover2');
     const bar = document.getElementById('bar');
     const btnContinue = document.getElementById('btnContinue');
     const btnRestart  = document.getElementById('btnRestart');
@@ -75,91 +107,81 @@
       `&poster=${encodeURIComponent('https://customer-b2gdb94hrid04n5r.cloudflarestream.com/'+VIDEO_ID+'/thumbnails/thumbnail.jpg?time=&height=600')}`;
 
     const getSaved = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
-    const saveTime = t => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
+    const saveTime = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
     const clearTime = () => localStorage.removeItem(RESUME_KEY);
 
-    // injeta o iframe começando em startSec
+    // Cria e injeta o iframe
     function mountIframe(startSec){
       const start = Math.max(0, Math.floor(Number(startSec)||0));
       const src = `${IFRAME_BASE}#t=${start}`;
-      box.querySelector('iframe')?.remove(); // limpa se existir
-      const wrap = document.createElement('div');
-      wrap.style.cssText = "position: relative; padding-top: 177.7777777778%;";
+      box.querySelector('iframe')?.remove();
       const iframe = document.createElement('iframe');
       iframe.src = src;
       iframe.loading = "lazy";
       iframe.allow = "autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope";
       iframe.allowFullscreen = true;
       iframe.style.cssText = "border:none; position:absolute; top:0; left:0; width:100%; height:100%;";
-      wrap.appendChild(iframe);
-      // posiciona corretamente dentro do #vsl-box (que já tem padding); substituímos o conteúdo interno
-      // Para manter o layout do #vsl-box, vamos só setar o iframe diretamente sem wrapper duplicado:
-      // então, ao invés de wrap, injeta direto:
       box.appendChild(iframe);
     }
 
-    // timer local para progresso
-    let ticker=null;
-    function startTicker(fromSec){
-      stopTicker();
-      let t = Math.max(0, Number(fromSec)||0);
-      const step = 0.5;
-      ticker = setInterval(()=>{
-        t += step;
-        saveTime(t);
-        if (VIDEO_DURATION>0){
-          const pct = Math.min(100, (t/VIDEO_DURATION)*100);
-          bar.style.width = pct + '%';
-        }
-      }, step*1000);
-      window.onbeforeunload = () => saveTime(t);
-      document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveTime(t); });
+    // Barra responsiva tipo VTurb
+    let barAnim = null;
+    function startProgress(fromSec){
+      cancelAnimationFrame(barAnim);
+      const start = Math.max(0, fromSec);
+      const startTime = performance.now();
+      const duration = VIDEO_DURATION * 1000;
+      const smoothFactor = 1.8; // acelera no início
+      function step(now){
+        const elapsed = (now - startTime)/1000 + start;
+        const normalized = Math.min(elapsed/VIDEO_DURATION,1);
+        const eased = Math.pow(normalized,1/smoothFactor);
+        bar.style.width = (eased*100).toFixed(2) + "%";
+        saveTime(elapsed);
+        if(normalized<1) barAnim=requestAnimationFrame(step);
+      }
+      barAnim=requestAnimationFrame(step);
     }
-    function stopTicker(){ if(ticker){ clearInterval(ticker); ticker=null; } }
 
     // Decide qual capa mostrar ao carregar
     (function init(){
       const saved = getSaved();
-      if (saved >= MIN_SECONDS_TO_OFFER){
-        cover1.classList.add('hide');   // some o GIF
-        cover2.classList.remove('hide'); // mostra PNG com botões
-      } else {
+      if(saved >= MIN_SECONDS_TO_OFFER){
+        cover1.classList.add('hide');
+        cover2.classList.remove('hide');
+      }else{
         cover2.classList.add('hide');
         cover1.classList.remove('hide');
       }
     })();
 
-    // CAPA 1 (GIF) — clique para iniciar do zero
+    // Capa 1 (GIF) — iniciar vídeo do zero
     cover1.addEventListener('click', ()=>{
       cover1.classList.add('hide');
-      cover2.classList.add('hide'); // garante
+      cover2.classList.add('hide');
       mountIframe(0);
-      startTicker(0);
+      startProgress(0);
     }, {once:true});
 
-    // CAPA 2 (PNG) — Continuar / Reiniciar
+    // Capa 2 (PNG) — continuar ou reiniciar
     btnContinue.addEventListener('click', ()=>{
       cover2.classList.add('hide');
-      const s = getSaved();
+      const s=getSaved();
       mountIframe(s);
-      startTicker(s);
+      startProgress(s);
     });
     btnRestart.addEventListener('click', ()=>{
       clearTime();
       cover2.classList.add('hide');
       mountIframe(0);
-      startTicker(0);
+      startProgress(0);
     });
 
-    // failsafe: se atingir a duração estimada, zera progresso
-    if (VIDEO_DURATION>0){
-      setInterval(()=>{
-        const t = getSaved();
-        if (t >= VIDEO_DURATION-1){
-          clearTime(); bar.style.width = '100%';
-        }
-      }, 1000);
-    }
+    // Se atingir a duração total, zera o progresso
+    setInterval(()=>{
+      const t=getSaved();
+      if(t>=VIDEO_DURATION-1){ clearTime(); bar.style.width='100%'; }
+    },1000);
   </script>
 </body>
 </html>
