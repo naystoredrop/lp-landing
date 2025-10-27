@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VSL Alta Conversión</title>
+  <title>VSL</title>
   <meta name="robots" content="noindex,nofollow" />
   <style>
     :root{ --brand:#ff6a00; --bg:#000; --fg:#fff; }
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box }
     body{
       margin:0; background:var(--bg); color:var(--fg);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
@@ -15,7 +15,7 @@
     }
     .wrap{ width:min(100%,900px); margin:auto }
 
-    /* Player 9:16 (vertical) como no seu snippet */
+    /* Caixa do player vertical 9:16 (mesmo modelo do seu snippet) */
     #vsl-box{
       position:relative; width:100%;
       padding-top:177.7777777778%; /* 9:16 */
@@ -27,7 +27,7 @@
       display:block;
     }
 
-    /* Capa GIF */
+    /* CAPA 1 — GIF para iniciar com som */
     .cover{
       position:absolute; inset:0; z-index:10;
       display:flex; align-items:center; justify-content:center;
@@ -39,7 +39,25 @@
       user-select:none; -webkit-user-drag:none;
     }
 
-    /* Barra VTurb */
+    /* CAPA 2 — PNG para “continuar ou reiniciar” (com botões sobre a imagem) */
+    .resume{
+      position:absolute; inset:0; z-index:11; display:none;
+      background:url('capathumilaicontinuar.png') center/cover no-repeat #000;
+    }
+    .resume.show{ display:block }
+    .actions{
+      position:absolute; left:0; right:0; bottom:8%;
+      display:flex; gap:12px; justify-content:center; flex-wrap:wrap; padding:0 16px;
+    }
+    .btn{
+      padding:12px 18px; border-radius:999px; border:2px solid transparent;
+      font-weight:800; font-size:18px; cursor:pointer;
+      box-shadow:0 6px 18px rgba(0,0,0,.35);
+    }
+    .btn-primary{ background:var(--brand); color:#000 }
+    .btn-ghost{ background:#00000088; color:#fff; border-color:#ffffff44 }
+
+    /* Barra de progresso estilo VTurb */
     .progress{
       position:absolute; left:0; right:0; bottom:0; z-index:5;
       height:8px; background:rgba(255,255,255,.12);
@@ -52,57 +70,33 @@
       transition:width .22s ease-out;
     }
 
-    /* Modal Retomar (sem imagem) */
-    .resume{
-      position:absolute; inset:0; z-index:11; display:none;
-      align-items:center; justify-content:center; padding:16px;
-      background:linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.9));
-    }
-    .resume.show{display:flex}
-    .card{
-      width:min(92vw,520px); background:#111; color:#fff; border:1px solid #ffffff22;
-      border-radius:18px; padding:22px; text-align:center; box-shadow:0 12px 32px rgba(0,0,0,.4);
-    }
-    .card h2{ margin:0 0 10px; font-size:clamp(20px,3.5vw,30px) }
-    .actions{ display:flex; gap:12px; justify-content:center; margin-top:14px; flex-wrap:wrap }
-    .btn{
-      padding:12px 18px; border-radius:999px; border:2px solid transparent;
-      font-weight:800; font-size:16px; cursor:pointer;
-    }
-    .btn-primary{ background:var(--brand); color:#000 }
-    .btn-ghost{ background:#00000066; color:#fff; border-color:#ffffff33 }
-
-    /* Botão flutuante Anti-mudo */
+    /* Botão flutuante anti-mudo (fallback) */
     .unmute{
       position:absolute; right:12px; top:12px; z-index:12;
       background:#111; color:#fff; border:2px solid #ffffff44;
       padding:8px 12px; border-radius:999px; font-weight:800; font-size:14px;
       display:none; align-items:center; gap:8px; cursor:pointer;
     }
-    .unmute.show{display:inline-flex}
+    .unmute.show{ display:inline-flex }
   </style>
 </head>
 <body>
   <div class="wrap">
     <div id="vsl-box">
-      <!-- CAPA (clique = libera áudio e injeta o player) -->
+      <!-- CAPA 1: GIF (capathumilai.gif) -->
       <div class="cover" id="cover">
-        <img src="capa%20thumilai.gif" alt="Haz clic para escuchar">
+        <img src="capathumilai.gif" alt="Haz clic para escuchar">
       </div>
 
-      <!-- Modal Retomar -->
+      <!-- CAPA 2: PNG (capathumilaicontinuar.png) com botões -->
       <div class="resume" id="resume">
-        <div class="card">
-          <h2>Ya comenzaste a ver este video.</h2>
-          <p>¿Quieres continuar donde paraste o ver desde el inicio?</p>
-          <div class="actions">
-            <button class="btn btn-primary" id="btnContinue">▶ Continuar viendo</button>
-            <button class="btn btn-ghost" id="btnRestart">↻ Ver desde el inicio</button>
-          </div>
+        <div class="actions">
+          <button class="btn btn-primary" id="btnContinue">▶ Continuar viendo</button>
+          <button class="btn btn-ghost" id="btnRestart">↻ Ver desde el inicio</button>
         </div>
       </div>
 
-      <!-- Botão anti-mudo (fallback) -->
+      <!-- Botão anti-mudo (se o browser exigir interação dentro do player) -->
       <button class="unmute" id="unmuteBtn">🔊 Ativar áudio</button>
 
       <!-- Barra -->
@@ -115,7 +109,7 @@
     const VIDEO_ID = '10d249a46e42039201d0fec47f6d1f5b';
     const VIDEO_DURATION = 4511;                 // 1:15:11 em segundos
     const RESUME_KEY = `vsl:${VIDEO_ID}:time`;
-    const OFFER_AFTER = 15;                      // oferecer retomada após 15s assistidos
+    const OFFER_AFTER = 15;                      // oferece “continuar” após 15s
     /**********************************/
 
     const box = document.getElementById('vsl-box');
@@ -126,7 +120,7 @@
     const unmuteBtn = document.getElementById('unmuteBtn');
     const bar = document.getElementById('bar');
 
-    // Base do iframe — com tudo que ajuda som + iOS
+    // Monta SRC do iframe (com possibilidade de iniciar de um tempo #t=segundos)
     function iframeSrc(startSec, withControls=false){
       const base = `https://customer-b2gdb94hrid04n5r.cloudflarestream.com/${VIDEO_ID}/iframe`;
       const poster = encodeURIComponent(`https://customer-b2gdb94hrid04n5r.cloudflarestream.com/${VIDEO_ID}/thumbnails/thumbnail.jpg?time=&height=600`);
@@ -142,30 +136,25 @@
       return `${base}?${params}#t=${t}`;
     }
 
+    // Helpers de progresso
     const getSaved = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
     const saveTime = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
     const clearTime = () => localStorage.removeItem(RESUME_KEY);
 
-    // injeta (ou reinjeta) o iframe
+    // Injeta (ou reinjeta) o iframe
     function mount(startSec, withControls=false){
-      // remove iframe antigo
-      const old = box.querySelector('iframe');
-      if (old) old.remove();
-
+      box.querySelector('iframe')?.remove();
       const iframe = document.createElement('iframe');
       iframe.src = iframeSrc(startSec, withControls);
-      // permissões máximas p/ áudio
       iframe.allow = "autoplay *; fullscreen *; encrypted-media *; picture-in-picture *; accelerometer *; gyroscope *";
       iframe.allowFullscreen = true;
-      iframe.loading = "eager"; // segura menos lazy quando há clique
+      iframe.loading = "eager";
       iframe.style.cssText = "border:none; position:absolute; top:0; left:0; width:100%; height:100%;";
       box.appendChild(iframe);
-
-      // começa barra visual e salvamento do tempo
       startProgress(startSec);
     }
 
-    // barra VTurb
+    // Barra VTurb (visual suave e responsiva)
     let anim=null;
     function startProgress(fromSec){
       cancelAnimationFrame(anim);
@@ -182,37 +171,34 @@
       anim=requestAnimationFrame(frame);
     }
 
-    // Decide se oferece retomada
+    // Decide qual capa mostrar ao carregar
     (function init(){
       const saved = getSaved();
       if (saved >= OFFER_AFTER && saved < VIDEO_DURATION - 5){
+        cover.classList.add('hide');   // já viu: mostra capa de continuar
         resume.classList.add('show');
-        cover.classList.add('hide');
       } else {
-        resume.classList.remove('show');
+        resume.classList.remove('show'); // primeira visita: gif
         cover.classList.remove('hide');
       }
     })();
 
-    // CLICOU NA CAPA → tenta com som direto
+    // CAPA 1 (GIF) → iniciar do zero
     cover.addEventListener('click', ()=>{
       cover.classList.add('hide');
       resume.classList.remove('show');
-      // tentativa 1: sem controles, som direto
       mount(0, false);
-      // timeout de verificação: se o browser ainda silenciar, mostra botão "Ativar áudio"
-      // (não dá pra detectar som no cross-origin; oferecemos o fallback sempre por segurança)
+      // Fallback anti-mudo (mostra botão para reinjetar com controles, se necessário)
       setTimeout(()=>{ unmuteBtn.classList.add('show'); }, 600);
     }, {once:true});
 
-    // RETOMAR
+    // CAPA 2 (PNG) → Continuar ou Reiniciar
     btnContinue.addEventListener('click', ()=>{
       resume.classList.remove('show');
-      mount(getSaved(), false);
+      const s = getSaved();
+      mount(s, false);
       setTimeout(()=>{ unmuteBtn.classList.add('show'); }, 600);
     });
-
-    // REINICIAR
     btnRestart.addEventListener('click', ()=>{
       clearTime();
       resume.classList.remove('show');
@@ -220,17 +206,14 @@
       setTimeout(()=>{ unmuteBtn.classList.add('show'); }, 600);
     });
 
-    // Fallback anti-mudo:
-    // Alguns navegadores exigem interação DENTRO do iframe; então reinjetamos com controls=1.
-    // A pessoa dá 1 toque no play/volume, o áudio fica liberado e você pode deixar assim
-    // ou reinjetar sem controles (opcional).
+    // Anti-mudo: alguns browsers exigem interação dentro do player
     unmuteBtn.addEventListener('click', ()=>{
       const s = getSaved();
-      mount(s, true);          // reinjeta com controles pra tocar com som
+      mount(s, true);                 // reinjeta com controles para tocar com som
       unmuteBtn.classList.remove('show');
     });
 
-    // Zera progresso quando atingir a duração total (failsafe)
+    // Failsafe: ao “terminar”
     setInterval(()=>{
       const t = getSaved();
       if(t >= VIDEO_DURATION - 1){
