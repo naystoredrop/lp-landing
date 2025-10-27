@@ -3,174 +3,176 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VSL Alta Conversión</title>
+  <title>VSL</title>
   <meta name="robots" content="noindex,nofollow" />
   <style>
     :root{
-      --brand:#ff6a00;
-      --bg:#000;
-      --fg:#fff;
+      --brand:#ff6a00;   /* cor da barra/CTAs */
+      --bg:#000; --fg:#fff; --card:#121212;
     }
     *{box-sizing:border-box}
     body{
       margin:0; background:var(--bg); color:var(--fg);
-      font-family:"Montserrat",Arial,Helvetica,sans-serif;
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      min-height:100vh; padding:0 10px;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      display:flex; justify-content:center; min-height:100vh; padding:18px;
     }
-    .player-box{
-      position:relative;
-      width:min(100%,900px);
-      aspect-ratio:16/9;
-      border-radius:18px;
-      overflow:hidden;
-      background:#000;
-      box-shadow:0 0 20px rgba(0,0,0,.5);
+    .wrap{width:min(100%,1000px); margin:auto}
+    .player{
+      position:relative; width:100%; aspect-ratio:16/9;
+      background:#000; border-radius:18px; overflow:hidden;
+      box-shadow:0 10px 40px rgba(0,0,0,.45);
     }
-    stream{
-      position:absolute; inset:0;
-      width:100%; height:100%;
-      border:none;
+    stream{position:absolute; inset:0; width:100%; height:100%; border:none}
+
+    /* CAPA 1: clicar para ativar som */
+    .cover, .resume{
+      position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+      background:#000; z-index:10; transition:opacity .25s ease;
     }
-    /* Capa inicial */
-    .cover{
-      position:absolute; inset:0;
-      background:#000;
-      display:flex; align-items:center; justify-content:center;
-      flex-direction:column;
-      cursor:pointer;
-      z-index:10;
-      transition:opacity .4s ease;
+    .cover.hidden, .resume.hidden{opacity:0; pointer-events:none}
+    .cover img, .resume img{
+      width:100%; height:100%; object-fit:cover; user-select:none; -webkit-user-drag:none;
     }
-    .cover.hidden{opacity:0; pointer-events:none}
-    .cover img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
+    .cover .tap{
+      position:absolute; inset:0; cursor:pointer; /* área clicável em toda a capa */
     }
-    /* Barra de progresso */
-    .progress{
-      position:absolute;
-      bottom:0; left:0; width:100%; height:6px;
-      background:rgba(255,255,255,.15);
-      z-index:5;
+
+    /* CAPA 2: retomada (com botões por cima da imagem) */
+    .resume .actions{
+      position:absolute; width:100%; left:0; bottom:8%;
+      display:flex; gap:12px; justify-content:center; flex-wrap:wrap; padding:0 16px;
     }
-    .progress span{
-      display:block; height:100%; width:0%;
-      background:var(--brand);
-      transition:width .25s linear;
+    .btn{
+      padding:12px 18px; border-radius:999px; border:2px solid transparent;
+      font-weight:800; cursor:pointer; font-size:18px;
+      box-shadow:0 6px 18px rgba(0,0,0,.35);
     }
-    /* Modal continuar / reiniciar */
-    .modal-backdrop{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.7);
-      display:none; align-items:center; justify-content:center;
-      z-index:20;
-    }
-    .modal.show{display:flex}
-    .modal-box{
-      background:#111; color:#fff; border-radius:16px;
-      padding:30px; text-align:center;
-      max-width:90%; width:400px;
-    }
-    .modal-box h2{margin:0 0 15px; font-size:22px;}
-    .modal-box button{
-      margin:10px; padding:12px 20px; border:none;
-      border-radius:30px; cursor:pointer; font-weight:600;
-      font-size:16px;
-    }
-    .btn-primary{background:var(--brand); color:#000;}
-    .btn-secondary{background:#333; color:#fff;}
+    .btn-primary{background:var(--brand); color:#000}
+    .btn-ghost{background:#00000088; color:#fff; border-color:#ffffff44}
+
+    /* barra de progresso */
+    .progress{position:absolute; left:0; right:0; bottom:0; height:6px; background:#ffffff22}
+    .progress span{position:absolute; inset:0; width:0%; background:var(--brand); transition:width .25s linear}
   </style>
   <script defer src="https://embed.cloudflarestream.com/embed/sdk.latest.js"></script>
 </head>
 <body>
+  <div class="wrap">
+    <div class="player" id="box">
+      <!-- Player Cloudflare -->
+      <stream id="vsl"
+        src="10d249a46e42039201d0fec47f6d1f5b"
+        controls
+        preload="metadata"
+        primaryColor="#ff6a00">
+      </stream>
 
-  <div class="player-box">
-    <!-- Player Cloudflare -->
-    <stream id="player"
-      src="10d249a46e42039201d0fec47f6d1f5b"
-      controls
-      preload="metadata"
-      primaryColor="#ff6a00">
-    </stream>
+      <!-- CAPA 1 — clicar para ativar som -->
+      <div class="cover" id="cover">
+        <img src="capa%20thumilai.gif" alt="Haz clic para escuchar"
+             onerror="this.src='capa%20thumilai.png'">
+        <div class="tap" title="Haz clic para escuchar"></div>
+      </div>
 
-    <!-- Capa inicial -->
-    <div class="cover" id="cover">
-      <img src="capa%20thumilai.gif" alt="Capa do vídeo" onerror="this.src='capa%20thumilai.png'">
-    </div>
+      <!-- CAPA 2 — retomada continuar/reiniciar -->
+      <div class="resume hidden" id="resume">
+        <img src="capa%20thumilai.png" alt="Continuar o reiniciar">
+        <div class="actions">
+          <button class="btn btn-primary" id="btnContinue">▶ Continuar viendo</button>
+          <button class="btn btn-ghost"   id="btnRestart">↻ Ver desde el inicio</button>
+        </div>
+      </div>
 
-    <!-- Barra de progresso -->
-    <div class="progress"><span id="progress-bar"></span></div>
-  </div>
-
-  <!-- Modal continuar / reiniciar -->
-  <div class="modal-backdrop" id="resumeModal">
-    <div class="modal-box">
-      <h2>Ya comenzaste a ver este video.</h2>
-      <button class="btn-primary" id="continueBtn">▶ Continuar viendo</button>
-      <button class="btn-secondary" id="restartBtn">↻ Ver desde el inicio</button>
+      <!-- Barra de progresso -->
+      <div class="progress" aria-hidden="true"><span id="bar"></span></div>
     </div>
   </div>
 
   <script>
-    const videoId = "10d249a46e42039201d0fec47f6d1f5b";
-    const resumeKey = `vsl:${videoId}:time`;
-    const player = document.getElementById("player");
-    const cover = document.getElementById("cover");
-    const progressBar = document.getElementById("progress-bar");
-    const modal = document.getElementById("resumeModal");
-    const continueBtn = document.getElementById("continueBtn");
-    const restartBtn = document.getElementById("restartBtn");
+    // ===== CONFIG =====
+    const VIDEO_ID = '10d249a46e42039201d0fec47f6d1f5b';
+    const RESUME_KEY = `vsl:${VIDEO_ID}:time`;
+    const MIN_SECONDS_TO_OFFER_RESUME = 15; // só oferece retomar se já assistiu pelo menos isso
+    // ==================
 
-    function getSavedTime(){
-      const t = localStorage.getItem(resumeKey);
-      return Number(t) || 0;
-    }
-    function saveTime(t){
-      localStorage.setItem(resumeKey, Math.floor(t));
-    }
-    function clearTime(){
-      localStorage.removeItem(resumeKey);
-    }
+    const player = document.getElementById('vsl');
+    const cover  = document.getElementById('cover');      // capa para ativar som
+    const resume = document.getElementById('resume');     // capa de retomada
+    const bar    = document.getElementById('bar');
+    const btnContinue = document.getElementById('btnContinue');
+    const btnRestart  = document.getElementById('btnRestart');
 
-    // Clique na capa = iniciar vídeo com áudio
-    cover.addEventListener("click", async()=>{
-      cover.classList.add("hidden");
-      const saved = getSavedTime();
-      if(saved > 15){
-        modal.classList.add("show");
+    const tapArea = cover.querySelector('.tap');
+
+    // helpers de progresso
+    const getSaved = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
+    const saveTime = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
+    const clearTime= () => localStorage.removeItem(RESUME_KEY);
+
+    // lógica de exibição das capas
+    let duration = 0;
+    player.addEventListener('loadedmetadata', () => {
+      duration = Number(player.duration) || 0;
+      const saved = getSaved();
+
+      // Se já viu o suficiente e não terminou, mostra CAPA 2 (retomar)
+      const offerResume = saved >= MIN_SECONDS_TO_OFFER_RESUME && saved < (duration - 5);
+      if (offerResume){
+        cover.classList.add('hidden');
+        resume.classList.remove('hidden');
       } else {
-        await startPlayback(0);
+        resume.classList.add('hidden');
+        cover.classList.remove('hidden');
       }
     });
 
-    async function startPlayback(time=0){
-      try{
-        player.currentTime = time;
-        await player.play();
-        player.muted = false;
-      }catch(e){console.log(e);}
-    }
-
-    continueBtn.onclick = async()=>{
-      modal.classList.remove("show");
-      await startPlayback(getSavedTime());
-    };
-    restartBtn.onclick = async()=>{
-      modal.classList.remove("show");
-      clearTime();
+    // CAPA 1: clique para iniciar com som
+    tapArea.addEventListener('click', async () => {
+      cover.classList.add('hidden');
+      resume.classList.add('hidden'); // garante
       await startPlayback(0);
-    };
-
-    player.addEventListener("timeupdate", ()=>{
-      const t = player.currentTime;
-      const d = player.duration || 1;
-      progressBar.style.width = ((t/d)*100) + "%";
-      saveTime(t);
     });
 
-    player.addEventListener("ended", ()=> clearTime());
+    // CAPA 2: continuar/reiniciar
+    btnContinue.addEventListener('click', async () => {
+      resume.classList.add('hidden');
+      await startPlayback(getSaved());
+    });
+    btnRestart.addEventListener('click', async () => {
+      clearTime();
+      resume.classList.add('hidden');
+      await startPlayback(0);
+    });
+
+    // play com áudio (só funciona após interação)
+    async function startPlayback(fromTime){
+      try{
+        player.currentTime = Math.max(0, Number(fromTime)||0);
+        await player.play();
+        player.muted = false; // garante som
+      }catch(e){
+        console.warn('Playback bloqueado, esperando nova interação', e);
+      }
+    }
+
+    // barra + persistência
+    player.addEventListener('timeupdate', () => {
+      const t = Number(player.currentTime) || 0;
+      const d = Number(player.duration) || 1;
+      bar.style.width = Math.min(100, (t/d)*100) + '%';
+      if (!player.paused) saveTime(t);
+    });
+
+    // fim do vídeo: zera progresso
+    player.addEventListener('ended', () => {
+      bar.style.width = '100%';
+      clearTime();
+    });
+
+    // salva ao sair
+    window.addEventListener('beforeunload', () => {
+      saveTime(Number(player.currentTime)||0);
+    });
   </script>
 </body>
 </html>
