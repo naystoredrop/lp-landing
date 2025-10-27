@@ -3,81 +3,103 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VSL Alta Conversión</title>
+  <title>VSL</title>
   <meta name="robots" content="noindex,nofollow" />
   <style>
-    :root{
-      --brand:#ff6a00;
-      --bg:#000;
-      --fg:#fff;
-    }
+    :root{ --brand:#ff6a00; --bg:#000; --fg:#fff; --card:#111; }
     *{box-sizing:border-box}
     body{
       margin:0; background:var(--bg); color:var(--fg);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       display:flex; justify-content:center; min-height:100vh; padding:16px;
     }
-    .wrap{width:min(100%,900px); margin:auto}
-    #vsl-box{
-      position:relative; width:100%; padding-top:177.7777777778%;
-      border-radius:16px; overflow:hidden; background:#000;
-      box-shadow:0 10px 40px rgba(0,0,0,.5);
+    .wrap{ width:min(100%,900px); margin:auto }
+
+    /* Player 9:16 (vertical) */
+    .player{
+      position:relative; width:100%;
+      aspect-ratio:9/16;               /* equivalente a 177.777...% */
+      background:#000; border-radius:16px;
+      overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,.5);
     }
-    #vsl-box iframe{
-      border:none; position:absolute; top:0; left:0; width:100%; height:100%;
-    }
-    /* Capas */
-    .layer{
+    stream{ position:absolute; inset:0; width:100%; height:100%; border:0 }
+
+    /* CAPA (ativar som) */
+    .cover{
       position:absolute; inset:0; z-index:10;
       display:flex; align-items:center; justify-content:center;
       transition:opacity .25s ease;
     }
-    .hide{opacity:0; pointer-events:none}
-    .layer img{
+    .cover.hidden{ opacity:0; pointer-events:none }
+    .cover img{
       width:100%; height:100%; object-fit:cover;
       user-select:none; -webkit-user-drag:none;
+      display:block;
     }
-    .tap{position:absolute; inset:0; cursor:pointer}
-    /* Barra estilo VTurb */
+    .cover .tap{ position:absolute; inset:0; cursor:pointer }
+
+    /* OVERLAY DE RETOMADA */
+    .resume{
+      position:absolute; inset:0; z-index:11;
+      display:none; align-items:center; justify-content:center; padding:16px;
+      background:linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.9));
+    }
+    .resume.show{ display:flex }
+    .card{
+      width:min(92vw,520px); background:var(--card); color:#fff;
+      border:1px solid #ffffff22; border-radius:18px; padding:22px; text-align:center;
+      box-shadow:0 12px 32px rgba(0,0,0,.4);
+    }
+    .card h2{ margin:0 0 10px; font-size:clamp(20px,3.5vw,30px) }
+    .actions{ display:flex; gap:12px; justify-content:center; margin-top:14px; flex-wrap:wrap }
+    .btn{
+      padding:12px 18px; border-radius:999px; border:2px solid transparent;
+      font-weight:800; font-size:16px; cursor:pointer;
+    }
+    .btn-primary{ background:var(--brand); color:#000 }
+    .btn-ghost{ background:#00000066; color:#fff; border-color:#ffffff33 }
+
+    /* Barra de progresso estilo VTurb */
     .progress{
       position:absolute; left:0; right:0; bottom:0;
-      height:8px; background:rgba(255,255,255,.12);
+      height:8px; background:rgba(255,255,255,.12); z-index:6;
       box-shadow:0 0 8px rgba(255,106,0,.5);
-      z-index:5;
     }
     .progress span{
       display:block; height:100%; width:0%;
       background:linear-gradient(90deg,#ff6a00,#ffb347);
-      transition:width .25s ease-out;
+      transition:width .2s ease-out;
     }
-    /* Botões da capa 2 */
-    .actions{
-      position:absolute; left:0; right:0; bottom:8%;
-      display:flex; gap:12px; justify-content:center; padding:0 16px; flex-wrap:wrap;
-    }
-    .btn{
-      padding:12px 18px; border-radius:999px; border:2px solid transparent;
-      font-weight:800; font-size:18px; cursor:pointer;
-    }
-    .btn-primary{background:var(--brand); color:#000;}
-    .btn-ghost{background:#00000088; color:#fff; border-color:#ffffff44;}
   </style>
+  <!-- SDK Cloudflare Stream para o <stream /> -->
+  <script defer src="https://embed.cloudflarestream.com/embed/sdk.latest.js"></script>
 </head>
 <body>
   <div class="wrap">
-    <div id="vsl-box">
-      <!-- Capa 1: GIF para ativar o som -->
-      <div class="layer" id="cover1">
-        <img src="capa%20thumilai.gif" alt="Haz clic para escuchar" onerror="this.src='capa%20thumilai.png'">
+    <div class="player">
+      <!-- Player oficial (permite retomar de verdade) -->
+      <stream id="vsl"
+        src="10d249a46e42039201d0fec47f6d1f5b"
+        controls
+        preload="metadata"
+        primaryColor="#ff6a00">
+      </stream>
+
+      <!-- CAPA ÚNICA (gif) -->
+      <div class="cover" id="cover">
+        <img src="capa%20thumilai.gif" alt="Haz clic para escuchar">
         <div class="tap" title="Haz clic para escuchar"></div>
       </div>
 
-      <!-- Capa 2: PNG ao recarregar -->
-      <div class="layer hide" id="cover2">
-        <img src="capa%20thumilai.png" alt="Continuar o reiniciar">
-        <div class="actions">
-          <button class="btn btn-primary" id="btnContinue">▶ Continuar viendo</button>
-          <button class="btn btn-ghost" id="btnRestart">↻ Ver desde el inicio</button>
+      <!-- OVERLAY de retomada (sem imagem) -->
+      <div class="resume" id="resume">
+        <div class="card">
+          <h2>Ya comenzaste a ver este video.</h2>
+          <p>¿Quieres continuar donde paraste o ver desde el inicio?</p>
+          <div class="actions">
+            <button class="btn btn-primary" id="btnContinue">▶ Continuar viendo</button>
+            <button class="btn btn-ghost" id="btnRestart">↻ Ver desde el inicio</button>
+          </div>
         </div>
       </div>
 
@@ -87,101 +109,93 @@
   </div>
 
   <script>
-    // ================= CONFIG =================
+    // ============== CONFIG =================
     const VIDEO_ID   = '10d249a46e42039201d0fec47f6d1f5b';
     const RESUME_KEY = `vsl:${VIDEO_ID}:time`;
-    const MIN_SECONDS_TO_OFFER = 15;   // tempo mínimo antes de oferecer "continuar"
-    const VIDEO_DURATION = 1800;       // duração estimada (segundos)
-    // ==========================================
+    const OFFER_AFTER = 15; // seg assistidos para oferecer retomada
+    // =======================================
 
-    const box = document.getElementById('vsl-box');
-    const cover1 = document.getElementById('cover1');
-    const cover2 = document.getElementById('cover2');
-    const bar = document.getElementById('bar');
-    const btnContinue = document.getElementById('btnContinue');
-    const btnRestart  = document.getElementById('btnRestart');
-
-    const IFRAME_BASE =
-      `https://customer-b2gdb94hrid04n5r.cloudflarestream.com/${VIDEO_ID}/iframe` +
-      `?autoplay=true&controls=false&playsinline=true` +
-      `&poster=${encodeURIComponent('https://customer-b2gdb94hrid04n5r.cloudflarestream.com/'+VIDEO_ID+'/thumbnails/thumbnail.jpg?time=&height=600')}`;
+    const player     = document.getElementById('vsl');
+    const cover      = document.getElementById('cover');
+    const tapArea    = cover.querySelector('.tap');
+    const resume     = document.getElementById('resume');
+    const btnCont    = document.getElementById('btnContinue');
+    const btnRestart = document.getElementById('btnRestart');
+    const bar        = document.getElementById('bar');
 
     const getSaved = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
     const saveTime = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
-    const clearTime = () => localStorage.removeItem(RESUME_KEY);
+    const clearTime= () => localStorage.removeItem(RESUME_KEY);
 
-    // Cria e injeta o iframe
-    function mountIframe(startSec){
-      const start = Math.max(0, Math.floor(Number(startSec)||0));
-      const src = `${IFRAME_BASE}#t=${start}`;
-      box.querySelector('iframe')?.remove();
-      const iframe = document.createElement('iframe');
-      iframe.src = src;
-      iframe.loading = "lazy";
-      iframe.allow = "autoplay; fullscreen; encrypted-media; picture-in-picture; accelerometer; gyroscope";
-      iframe.allowFullscreen = true;
-      iframe.style.cssText = "border:none; position:absolute; top:0; left:0; width:100%; height:100%;";
-      box.appendChild(iframe);
-    }
+    let metaLoaded = false;
 
-    // Barra responsiva tipo VTurb
-    let barAnim = null;
-    function startProgress(fromSec){
-      cancelAnimationFrame(barAnim);
-      const start = Math.max(0, fromSec);
-      const startTime = performance.now();
-      const duration = VIDEO_DURATION * 1000;
-      const smoothFactor = 1.8; // acelera no início
-      function step(now){
-        const elapsed = (now - startTime)/1000 + start;
-        const normalized = Math.min(elapsed/VIDEO_DURATION,1);
-        const eased = Math.pow(normalized,1/smoothFactor);
-        bar.style.width = (eased*100).toFixed(2) + "%";
-        saveTime(elapsed);
-        if(normalized<1) barAnim=requestAnimationFrame(step);
+    // Quando metadados carregarem, decide se mostra overlay de retomada
+    player.addEventListener('loadedmetadata', () => {
+      metaLoaded = true;
+      const d = Number(player.duration) || 0;
+      const s = getSaved();
+      const canOffer = s >= OFFER_AFTER && s < Math.max(5, d - 5);
+
+      if (canOffer){
+        // mostra RESUME overlay (sem imagem)
+        resume.classList.add('show');
+        cover.classList.add('hidden');
+      } else {
+        // primeira visita: mostra CAPA gif
+        resume.classList.remove('show');
+        cover.classList.remove('hidden');
       }
-      barAnim=requestAnimationFrame(step);
-    }
-
-    // Decide qual capa mostrar ao carregar
-    (function init(){
-      const saved = getSaved();
-      if(saved >= MIN_SECONDS_TO_OFFER){
-        cover1.classList.add('hide');
-        cover2.classList.remove('hide');
-      }else{
-        cover2.classList.add('hide');
-        cover1.classList.remove('hide');
-      }
-    })();
-
-    // Capa 1 (GIF) — iniciar vídeo do zero
-    cover1.addEventListener('click', ()=>{
-      cover1.classList.add('hide');
-      cover2.classList.add('hide');
-      mountIframe(0);
-      startProgress(0);
-    }, {once:true});
-
-    // Capa 2 (PNG) — continuar ou reiniciar
-    btnContinue.addEventListener('click', ()=>{
-      cover2.classList.add('hide');
-      const s=getSaved();
-      mountIframe(s);
-      startProgress(s);
     });
-    btnRestart.addEventListener('click', ()=>{
+
+    // CAPA: clique para tocar do zero com som
+    async function startFrom(timeSec){
+      try{
+        // seta posição ANTES do play (funciona no <stream>)
+        player.currentTime = Math.max(0, Number(timeSec)||0);
+        await player.play();
+        player.muted = false;
+      }catch(e){ /* se o navegador bloquear, precisa de novo clique */ }
+    }
+
+    tapArea.addEventListener('click', async () => {
+      cover.classList.add('hidden');
+      resume.classList.remove('show');
+      await startFrom(0);
+    }, { once:true });
+
+    // Overlays de retomada
+    btnCont.addEventListener('click', async () => {
+      resume.classList.remove('show');
+      cover.classList.add('hidden');
+      await startFrom(getSaved());
+    });
+
+    btnRestart.addEventListener('click', async () => {
       clearTime();
-      cover2.classList.add('hide');
-      mountIframe(0);
-      startProgress(0);
+      resume.classList.remove('show');
+      cover.classList.add('hidden');
+      await startFrom(0);
     });
 
-    // Se atingir a duração total, zera o progresso
-    setInterval(()=>{
-      const t=getSaved();
-      if(t>=VIDEO_DURATION-1){ clearTime(); bar.style.width='100%'; }
-    },1000);
+    // Barra & persistência usando tempo REAL do player
+    player.addEventListener('timeupdate', () => {
+      const t = Number(player.currentTime) || 0;
+      const d = Number(player.duration) || 1;
+      const pct = Math.min(100, (t/d)*100);
+      bar.style.width = pct.toFixed(2) + '%';
+      if (!player.paused) saveTime(t);
+    });
+
+    // Ao terminar, zera progresso
+    player.addEventListener('ended', () => {
+      bar.style.width = '100%';
+      clearTime();
+    });
+
+    // Salva ao sair/recarregar
+    window.addEventListener('beforeunload', () => {
+      saveTime(Number(player.currentTime)||0);
+    });
   </script>
 </body>
 </html>
