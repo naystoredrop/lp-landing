@@ -3,248 +3,174 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>VSL</title>
+  <title>VSL Alta Conversión</title>
   <meta name="robots" content="noindex,nofollow" />
-  <!-- Fonte opcional -->
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     :root{
-      --brand:#ff6a00;          /* cor da barra/CTAs */
-      --bg:#0b0b0b;             /* fundo da página */
-      --fg:#ffffff;             /* texto claro */
-      --card:#151315;           /* cards/modais */
+      --brand:#ff6a00;
+      --bg:#000;
+      --fg:#fff;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0; background:var(--bg); color:var(--fg);
-      font-family:Montserrat,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      display:flex; align-items:flex-start; justify-content:center;
+      font-family:"Montserrat",Arial,Helvetica,sans-serif;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-height:100vh; padding:0 10px;
     }
-    .wrap{
-      width:min(100%,1000px); margin:32px auto; padding:0 12px;
-    }
-    h1{font-size:clamp(28px,5vw,56px); text-align:center; margin:0 0 18px; line-height:1.05}
-    /* container do player com proporção responsiva 16:9 */
-    .player-shell{
-      position:relative; width:100%;
-      aspect-ratio:16/9; background:#000; border-radius:18px; overflow:hidden;
-      box-shadow:0 10px 40px rgba(0,0,0,.45);
+    .player-box{
+      position:relative;
+      width:min(100%,900px);
+      aspect-ratio:16/9;
+      border-radius:18px;
+      overflow:hidden;
+      background:#000;
+      box-shadow:0 0 20px rgba(0,0,0,.5);
     }
     stream{
-      position:absolute; inset:0; width:100%; height:100%;
+      position:absolute; inset:0;
+      width:100%; height:100%;
       border:none;
     }
-    /* Capa/overlay para iniciar com som */
+    /* Capa inicial */
     .cover{
-      position:absolute; inset:0; display:flex; flex-direction:column;
-      align-items:center; justify-content:center; gap:22px;
-      background:linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,.85));
-      text-align:center; padding:32px;
-      transition:opacity .25s ease;
+      position:absolute; inset:0;
+      background:#000;
+      display:flex; align-items:center; justify-content:center;
+      flex-direction:column;
+      cursor:pointer;
+      z-index:10;
+      transition:opacity .4s ease;
     }
     .cover.hidden{opacity:0; pointer-events:none}
-    .cover img{max-width:min(90%,720px); height:auto; border-radius:12px}
-    .cover .cta{
-      display:inline-flex; align-items:center; gap:12px;
-      background:var(--brand); color:#000; font-weight:900;
-      padding:14px 22px; border-radius:999px; cursor:pointer; border:none;
-      font-size:clamp(16px,2.5vw,22px);
-      box-shadow:0 6px 18px rgba(255,106,0,.35);
+    .cover img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
     }
-    .cover .hint{opacity:.9; font-size:clamp(14px,2vw,18px)}
-    /* Barra de progresso inteligente */
+    /* Barra de progresso */
     .progress{
-      position:absolute; left:0; right:0; bottom:0; height:6px; background:rgba(255,255,255,.1);
+      position:absolute;
+      bottom:0; left:0; width:100%; height:6px;
+      background:rgba(255,255,255,.15);
+      z-index:5;
     }
     .progress span{
-      position:absolute; left:0; top:0; bottom:0; width:0%;
-      background:var(--brand); transition:width .25s linear;
+      display:block; height:100%; width:0%;
+      background:var(--brand);
+      transition:width .25s linear;
     }
     /* Modal continuar / reiniciar */
     .modal-backdrop{
-      position:fixed; inset:0; background:rgba(0,0,0,.65);
-      display:none; align-items:center; justify-content:center; padding:20px; z-index:50;
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.7);
+      display:none; align-items:center; justify-content:center;
+      z-index:20;
     }
-    .modal{background:var(--card); border:1px solid rgba(255,255,255,.08);
-      border-radius:20px; width:min(92vw,560px); padding:28px; text-align:center}
-    .modal h2{margin:0 0 14px; font-size:clamp(22px,3.5vw,34px)}
-    .actions{display:flex; gap:12px; justify-content:center; margin-top:18px; flex-wrap:wrap}
-    .btn{
-      padding:12px 18px; border-radius:999px; border:2px solid transparent;
-      font-weight:800; cursor:pointer; font-size:18px
+    .modal.show{display:flex}
+    .modal-box{
+      background:#111; color:#fff; border-radius:16px;
+      padding:30px; text-align:center;
+      max-width:90%; width:400px;
     }
-    .btn-primary{background:var(--brand); color:#000}
-    .btn-ghost{background:transparent; color:#fff; border-color:#ffffff33}
-    .show{display:flex}
+    .modal-box h2{margin:0 0 15px; font-size:22px;}
+    .modal-box button{
+      margin:10px; padding:12px 20px; border:none;
+      border-radius:30px; cursor:pointer; font-weight:600;
+      font-size:16px;
+    }
+    .btn-primary{background:var(--brand); color:#000;}
+    .btn-secondary{background:#333; color:#fff;}
   </style>
-  <!-- SDK do Cloudflare Stream (necessário para o <stream />) -->
   <script defer src="https://embed.cloudflarestream.com/embed/sdk.latest.js"></script>
 </head>
 <body>
-  <div class="wrap">
-    <h1 style="display:none">el dolor por neuropatía.</h1>
 
-    <div class="player-shell" id="vslBox">
-      <!-- Player nativo do Cloudflare Stream -->
-      <stream id="vsl"
-        src="10d249a46e42039201d0fec47f6d1f5b"
-        controls
-        preload="metadata"
-        primaryColor="#ff6a00"
-        poster=""
-      ></stream>
+  <div class="player-box">
+    <!-- Player Cloudflare -->
+    <stream id="player"
+      src="10d249a46e42039201d0fec47f6d1f5b"
+      controls
+      preload="metadata"
+      primaryColor="#ff6a00">
+    </stream>
 
-      <!-- Capa / clique para ativar som -->
-      <div class="cover" id="cover">
-        <!-- use sua arte de capa/gif abaixo (troque o src se quiser) -->
-        <img id="coverImg" alt="Haz clic para escuchar"
-             src="capa.gif"
-             onerror="this.style.display='none'">
-        <button class="cta" id="coverPlay" aria-label="Haz clic para escuchar">
-          ▶️  Haz clic para escuchar
-        </button>
-        <div class="hint">Tu video ya comenzó. Activa el audio con 1 clic.</div>
-      </div>
-
-      <!-- Barra de progresso -->
-      <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+    <!-- Capa inicial -->
+    <div class="cover" id="cover">
+      <img src="capa%20thumilai.gif" alt="Capa do vídeo" onerror="this.src='capa%20thumilai.png'">
     </div>
+
+    <!-- Barra de progresso -->
+    <div class="progress"><span id="progress-bar"></span></div>
   </div>
 
-  <!-- Modal de retomada -->
-  <div class="modal-backdrop" id="resumeModal" role="dialog" aria-modal="true">
-    <div class="modal">
+  <!-- Modal continuar / reiniciar -->
+  <div class="modal-backdrop" id="resumeModal">
+    <div class="modal-box">
       <h2>Ya comenzaste a ver este video.</h2>
-      <p>¿Quieres <b>continuar</b> donde paraste o <b>ver desde el inicio</b>?</p>
-      <div class="actions">
-        <button class="btn btn-primary" id="btnContinue">▶️ Continuar viendo</button>
-        <button class="btn btn-ghost" id="btnRestart">↻ Ver desde el inicio</button>
-      </div>
+      <button class="btn-primary" id="continueBtn">▶ Continuar viendo</button>
+      <button class="btn-secondary" id="restartBtn">↻ Ver desde el inicio</button>
     </div>
   </div>
-
-  <noscript>Habilita JavaScript para ver este vídeo.</noscript>
 
   <script>
-  // ======================== CONFIG RÁPIDA ========================
-  const CFG = {
-    videoId: '10d249a46e42039201d0fec47f6d1f5b',
-    // se quiser forçar pôster/capa estática do Cloudflare, defina aqui:
-    posterUrl: '', // ex: 'https://customer-b2gdb94hrid04n5r.cloudflarestream.com/10d249a46e42039201d0fec47f6d1f5b/thumbnails/thumbnail.jpg?time=1s&height=720'
-    coverImage: 'capa.gif', // troque pelo seu arquivo/local
-    minSecondsToOfferResume: 15,  // só mostra modal se já viu pelo menos isso
-    resumeKey: (id) => `vsl:${id}:time`
-  };
-  // ===============================================================
+    const videoId = "10d249a46e42039201d0fec47f6d1f5b";
+    const resumeKey = `vsl:${videoId}:time`;
+    const player = document.getElementById("player");
+    const cover = document.getElementById("cover");
+    const progressBar = document.getElementById("progress-bar");
+    const modal = document.getElementById("resumeModal");
+    const continueBtn = document.getElementById("continueBtn");
+    const restartBtn = document.getElementById("restartBtn");
 
-  const player = document.getElementById('vsl');        // <stream />
-  const bar = document.getElementById('bar');
-  const cover = document.getElementById('cover');
-  const coverPlay = document.getElementById('coverPlay');
-  const resumeModal = document.getElementById('resumeModal');
-  const btnContinue = document.getElementById('btnContinue');
-  const btnRestart = document.getElementById('btnRestart');
+    function getSavedTime(){
+      const t = localStorage.getItem(resumeKey);
+      return Number(t) || 0;
+    }
+    function saveTime(t){
+      localStorage.setItem(resumeKey, Math.floor(t));
+    }
+    function clearTime(){
+      localStorage.removeItem(resumeKey);
+    }
 
-  // aplica poster se definido
-  if (CFG.posterUrl) player.setAttribute('poster', CFG.posterUrl);
-  // atualiza capa se trocar o arquivo
-  document.getElementById('coverImg').src = CFG.coverImage;
-
-  // util: ler/salvar progresso no localStorage
-  function getSavedTime(){
-    const v = localStorage.getItem(CFG.resumeKey(CFG.videoId));
-    const n = Number(v);
-    return Number.isFinite(n) ? n : 0;
-  }
-  function saveTime(t){
-    try{ localStorage.setItem(CFG.resumeKey(CFG.videoId), String(Math.max(0,t||0))); }catch(_){}
-  }
-  function clearTime(){
-    try{ localStorage.removeItem(CFG.resumeKey(CFG.videoId)); }catch(_){}
-  }
-
-  // desbloqueia áudio e inicia
-  async function startPlayback(fromTime){
-    try{
-      if (fromTime && Number.isFinite(fromTime)){
-        player.currentTime = Math.max(0, fromTime);
+    // Clique na capa = iniciar vídeo com áudio
+    cover.addEventListener("click", async()=>{
+      cover.classList.add("hidden");
+      const saved = getSavedTime();
+      if(saved > 15){
+        modal.classList.add("show");
+      } else {
+        await startPlayback(0);
       }
-      await player.play();
-      // garante desmutado (o play após interação do usuário permite áudio)
-      if (player.muted) player.muted = false;
-    }catch(e){
-      // se o navegador bloquear, mantém capa até conseguir tocar
-      console.warn('Autoplay protegido, aguardando clique', e);
-    }
-  }
+    });
 
-  // Clique na capa
-  coverPlay.addEventListener('click', async () => {
-    cover.classList.add('hidden');
-    // se havia modal de retomada pendente, ele que decide o time;
-    // caso contrário, inicia do zero ou do salvamento leve
-    const saved = getSavedTime();
-    const useSaved = saved >= CFG.minSecondsToOfferResume;
-    await startPlayback(useSaved ? saved : 0);
-  });
-
-  // Progresso e persistência
-  let duration = 0;
-  player.addEventListener('loadedmetadata', () => {
-    duration = Number(player.duration) || 0;
-    // oferta modal de retomada somente se user já viu um trecho
-    const saved = getSavedTime();
-    const okWindow = saved >= CFG.minSecondsToOfferResume && saved < (duration - 5);
-    if (okWindow){
-      // mostra modal em cima da capa; só sai quando escolher
-      resumeModal.classList.add('show');
+    async function startPlayback(time=0){
+      try{
+        player.currentTime = time;
+        await player.play();
+        player.muted = false;
+      }catch(e){console.log(e);}
     }
-  });
 
-  // Atualiza barra a cada timeupdate (≈ 4–5x/s)
-  player.addEventListener('timeupdate', () => {
-    const t = Number(player.currentTime) || 0;
-    const d = Number(player.duration) || 0;
-    if (d > 0){
-      const pct = Math.min(100, (t/d)*100);
-      bar.style.width = pct + '%';
-    }
-    // salva de forma econômica (a cada ~1s)
-    if (!player.paused) {
+    continueBtn.onclick = async()=>{
+      modal.classList.remove("show");
+      await startPlayback(getSavedTime());
+    };
+    restartBtn.onclick = async()=>{
+      modal.classList.remove("show");
+      clearTime();
+      await startPlayback(0);
+    };
+
+    player.addEventListener("timeupdate", ()=>{
+      const t = player.currentTime;
+      const d = player.duration || 1;
+      progressBar.style.width = ((t/d)*100) + "%";
       saveTime(t);
-    }
-  });
+    });
 
-  // Limpa progresso ao terminar (opcional: comente se quiser manter)
-  player.addEventListener('ended', () => {
-    clearTime();
-    bar.style.width = '100%';
-  });
-
-  // Salva ao sair / recarregar
-  window.addEventListener('beforeunload', () => {
-    saveTime(Number(player.currentTime)||0);
-  });
-
-  // Ações do modal
-  btnContinue.addEventListener('click', async () => {
-    resumeModal.classList.remove('show');
-    cover.classList.add('hidden');
-    await startPlayback(getSavedTime());
-  });
-  btnRestart.addEventListener('click', async () => {
-    resumeModal.classList.remove('show');
-    cover.classList.add('hidden');
-    clearTime();
-    await startPlayback(0);
-  });
-
-  // Acessibilidade: iniciar com Enter/Espaço na capa
-  cover.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); coverPlay.click(); }
-  });
+    player.addEventListener("ended", ()=> clearTime());
   </script>
 </body>
 </html>
