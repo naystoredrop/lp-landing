@@ -7,7 +7,7 @@
   <meta name="robots" content="noindex,nofollow" />
   <style>
     :root{
-      --brand:#ff6a00;   /* cor da barra/CTAs */
+      --brand:#ff6a00; /* cor da barra/CTAs */
       --bg:#000; --fg:#fff; --card:#121212;
     }
     *{box-sizing:border-box}
@@ -22,7 +22,13 @@
       background:#000; border-radius:18px; overflow:hidden;
       box-shadow:0 10px 40px rgba(0,0,0,.45);
     }
-    stream{position:absolute; inset:0; width:100%; height:100%; border:none}
+
+    /* iframe responsivo (mesmo estilo que você mandou) */
+    .iframe-box{position:relative; width:100%; height:100%}
+    .iframe-pad{position:relative; padding-top:125%; width:100%; height:100%}
+    .iframe-pad iframe{
+      border:none; position:absolute; top:0; left:0; width:100%; height:100%;
+    }
 
     /* CAPA 1: clicar para ativar som */
     .cover, .resume{
@@ -34,10 +40,10 @@
       width:100%; height:100%; object-fit:cover; user-select:none; -webkit-user-drag:none;
     }
     .cover .tap{
-      position:absolute; inset:0; cursor:pointer; /* área clicável em toda a capa */
+      position:absolute; inset:0; cursor:pointer; /* toda a capa é clicável */
     }
 
-    /* CAPA 2: retomada (com botões por cima da imagem) */
+    /* CAPA 2: retomada (botões sobre a imagem) */
     .resume .actions{
       position:absolute; width:100%; left:0; bottom:8%;
       display:flex; gap:12px; justify-content:center; flex-wrap:wrap; padding:0 16px;
@@ -54,18 +60,14 @@
     .progress{position:absolute; left:0; right:0; bottom:0; height:6px; background:#ffffff22}
     .progress span{position:absolute; inset:0; width:0%; background:var(--brand); transition:width .25s linear}
   </style>
-  <script defer src="https://embed.cloudflarestream.com/embed/sdk.latest.js"></script>
 </head>
 <body>
   <div class="wrap">
     <div class="player" id="box">
-      <!-- Player Cloudflare -->
-      <stream id="vsl"
-        src="10d249a46e42039201d0fec47f6d1f5b"
-        controls
-        preload="metadata"
-        primaryColor="#ff6a00">
-      </stream>
+      <!-- IFRAME (será injetado via JS com o tempo correto) -->
+      <div class="iframe-box">
+        <div class="iframe-pad" id="iframePad"></div>
+      </div>
 
       <!-- CAPA 1 — clicar para ativar som -->
       <div class="cover" id="cover">
@@ -89,90 +91,121 @@
   </div>
 
   <script>
-    // ===== CONFIG =====
-    const VIDEO_ID = '10d249a46e42039201d0fec47f6d1f5b';
+    // =================== CONFIG ===================
+    const VIDEO_ID   = '10d249a46e42039201d0fec47f6d1f5b';
     const RESUME_KEY = `vsl:${VIDEO_ID}:time`;
-    const MIN_SECONDS_TO_OFFER_RESUME = 15; // só oferece retomar se já assistiu pelo menos isso
-    // ==================
+    const MIN_SECONDS_TO_OFFER_RESUME = 15;
 
-    const player = document.getElementById('vsl');
-    const cover  = document.getElementById('cover');      // capa para ativar som
-    const resume = document.getElementById('resume');     // capa de retomada
-    const bar    = document.getElementById('bar');
+    // Duração estimada (em segundos) — coloque a real do seu vídeo para a barra ficar 100% precisa
+    const VIDEO_DURATION = 1800; // 30 min; ajuste conforme seu vídeo
+    // ===============================================
+
+    const cover    = document.getElementById('cover');
+    const resume   = document.getElementById('resume');
+    const bar      = document.getElementById('bar');
+    const pad      = document.getElementById('iframePad');
+    const tapArea  = cover.querySelector('.tap');
     const btnContinue = document.getElementById('btnContinue');
     const btnRestart  = document.getElementById('btnRestart');
 
-    const tapArea = cover.querySelector('.tap');
+    // Base do iframe que você mandou
+    const IFRAME_BASE =
+      `https://customer-b2gdb94hrid04n5r.cloudflarestream.com/${VIDEO_ID}/iframe` +
+      `?autoplay=true&poster=${encodeURIComponent(`https://customer-b2gdb94hrid04n5r.cloudflarestream.com/${VIDEO_ID}/thumbnails/thumbnail.jpg?time=&height=600`)}&controls=false`;
 
     // helpers de progresso
     const getSaved = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
     const saveTime = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
     const clearTime= () => localStorage.removeItem(RESUME_KEY);
 
-    // lógica de exibição das capas
-    let duration = 0;
-    player.addEventListener('loadedmetadata', () => {
-      duration = Number(player.duration) || 0;
-      const saved = getSaved();
+    // cria/atualiza o iframe começando em "startSec"
+    function mountIframe(startSec){
+      const start = Math.max(0, Math.floor(Number(startSec)||0));
+      const src   = `${IFRAME_BASE}#t=${start}`; // media fragment para iniciar do tempo salvo
+      pad.innerHTML = `
+        <div style="position: relative; padding-top: 125%;">
+          <iframe
+            src="${src}"
+            loading="lazy"
+            style="border:none; position:absolute; top:0; left:0; width:100%; height:100%;"
+            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+            allowfullscreen="true">
+          </iframe>
+        </div>
+      `;
+    }
 
-      // Se já viu o suficiente e não terminou, mostra CAPA 2 (retomar)
-      const offerResume = saved >= MIN_SECONDS_TO_OFFER_RESUME && saved < (duration - 5);
-      if (offerResume){
+    // Timer local para medir playhead (não temos acesso ao tempo interno do iframe)
+    let ticker = null;
+    function startTicker(fromSec){
+      stopTicker();
+      let t = Math.max(0, Number(fromSec)||0);
+      const step = 0.5; // segundos
+      ticker = setInterval(()=>{
+        t += step;
+        saveTime(t);
+        if (VIDEO_DURATION > 0){
+          const pct = Math.min(100, (t/VIDEO_DURATION)*100);
+          bar.style.width = pct + '%';
+        }
+      }, step*1000);
+      // salva também ao trocar de aba/sair
+      window.onbeforeunload = () => saveTime(t);
+      document.addEventListener('visibilitychange', ()=>{ if(document.hidden) saveTime(t); }, {once:false});
+    }
+    function stopTicker(){
+      if (ticker){ clearInterval(ticker); ticker = null; }
+    }
+
+    // Decide qual capa mostrar ao carregar
+    (function init(){
+      const saved = getSaved();
+      if (saved >= MIN_SECONDS_TO_OFFER_RESUME){
         cover.classList.add('hidden');
         resume.classList.remove('hidden');
       } else {
         resume.classList.add('hidden');
         cover.classList.remove('hidden');
       }
-    });
+      // monta um iframe "silencioso" default (não toca até clicar)
+      // aqui deixamos sem autoplay (evita tocar sem consentimento). Vai ser substituído no clique.
+      pad.innerHTML = '';
+    })();
 
-    // CAPA 1: clique para iniciar com som
-    tapArea.addEventListener('click', async () => {
+    // CAPA 1: clique para iniciar com som do zero
+    tapArea.addEventListener('click', ()=>{
       cover.classList.add('hidden');
-      resume.classList.add('hidden'); // garante
-      await startPlayback(0);
+      resume.classList.add('hidden');
+      const startAt = 0;
+      mountIframe(startAt);
+      startTicker(startAt);
     });
 
     // CAPA 2: continuar/reiniciar
-    btnContinue.addEventListener('click', async () => {
+    btnContinue.addEventListener('click', ()=>{
       resume.classList.add('hidden');
-      await startPlayback(getSaved());
+      const startAt = getSaved();
+      mountIframe(startAt);
+      startTicker(startAt);
     });
-    btnRestart.addEventListener('click', async () => {
+    btnRestart.addEventListener('click', ()=>{
       clearTime();
       resume.classList.add('hidden');
-      await startPlayback(0);
+      const startAt = 0;
+      mountIframe(startAt);
+      startTicker(startAt);
     });
 
-    // play com áudio (só funciona após interação)
-    async function startPlayback(fromTime){
-      try{
-        player.currentTime = Math.max(0, Number(fromTime)||0);
-        await player.play();
-        player.muted = false; // garante som
-      }catch(e){
-        console.warn('Playback bloqueado, esperando nova interação', e);
-      }
+    // Se quiser resetar ao final manualmente (sem API do player), quando atingir a duração:
+    if (VIDEO_DURATION > 0){
+      setInterval(()=>{
+        const t = getSaved();
+        if (t >= VIDEO_DURATION - 1){
+          clearTime();
+          bar.style.width = '100%';
+        }
+      }, 1000);
     }
-
-    // barra + persistência
-    player.addEventListener('timeupdate', () => {
-      const t = Number(player.currentTime) || 0;
-      const d = Number(player.duration) || 1;
-      bar.style.width = Math.min(100, (t/d)*100) + '%';
-      if (!player.paused) saveTime(t);
-    });
-
-    // fim do vídeo: zera progresso
-    player.addEventListener('ended', () => {
-      bar.style.width = '100%';
-      clearTime();
-    });
-
-    // salva ao sair
-    window.addEventListener('beforeunload', () => {
-      saveTime(Number(player.currentTime)||0);
-    });
   </script>
 </body>
 </html>
