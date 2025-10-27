@@ -1,128 +1,254 @@
-<!-- substitua o trecho do vídeo atual da sua página por este bloco -->
-<div class="wrap">
-  <div class="vsl" id="vslBox">
-    <video id="vsl" playsinline webkit-playsinline preload="metadata"></video>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PainControl — VSL</title>
+  <meta name="robots" content="noindex,nofollow" />
+  <!-- hls.js para tocar o manifesto HLS da Cloudflare -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-    <!-- CAPA 1 (GIF para iniciar com som) -->
-    <div class="cover" id="cover">
-      <img src="capathumilai.gif" alt="Clique para ouvir">
-    </div>
+  <style>
+    /* ====== Reset leve e container ====== */
+    * { box-sizing: border-box }
+    html, body { height: 100% }
+    body {
+      margin: 0;
+      background: #000; color: #fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    .pc-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px;
+    }
 
-    <!-- CAPA 2 (Retomar vídeo) -->
-    <div class="resume" id="resume">
-      <div class="actions">
-        <button class="btn btn-primary" id="btnContinue">▶ Continuar assistindo</button>
-        <button class="btn btn-ghost" id="btnRestart">↻ Ver do início</button>
+    /* ====== Cabeçalho simples (não conflita com seu tema) ====== */
+    .pc-header {
+      text-align: center;
+      padding: 12px 0 8px;
+    }
+    .pc-header h1 {
+      margin: 0;
+      font-size: clamp(22px, 4vw, 32px);
+      letter-spacing: .2px;
+      font-weight: 800;
+    }
+    .pc-sub {
+      margin: 6px 0 18px;
+      opacity: .8;
+      font-size: clamp(13px, 2.5vw, 16px);
+    }
+
+    /* ====== VSL 100% (escopado em .pc-vsl*) ====== */
+    :root{
+      --pc-brand:#ff6a00;
+    }
+    .pc-vsl {
+      position: relative;
+      width: 100%;
+      /* 9:16 vertical igual ao seu snippet (177.777...%) */
+      padding-top: 177.7777777778%;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 10px 40px rgba(0,0,0,.5);
+    }
+    .pc-vsl video {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; background: #000; display: block; border: 0;
+    }
+
+    /* Capa GIF (start) */
+    .pc-cover {
+      position: absolute; inset: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .25s ease;
+    }
+    .pc-cover.pc-hide { opacity: 0; pointer-events: none }
+    .pc-cover img {
+      width: 100%; height: 100%; object-fit: cover; display: block; cursor: pointer;
+      user-select: none; -webkit-user-drag: none;
+    }
+
+    /* Capa PNG (retomar) com botões por cima */
+    .pc-resume {
+      position: absolute; inset: 0; z-index: 11; display: none;
+      background: url('capathumilaicontinuar.png') center/cover no-repeat #000;
+    }
+    .pc-resume.pc-show { display: block }
+    .pc-actions {
+      position: absolute; left: 0; right: 0; bottom: 8%;
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; padding: 0 16px;
+    }
+    .pc-btn {
+      padding: 12px 18px; border-radius: 999px; border: 2px solid transparent;
+      font-weight: 800; font-size: 18px; cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0,0,0,.35);
+    }
+    .pc-btn-primary { background: var(--pc-brand); color: #000 }
+    .pc-btn-ghost   { background: #00000088; color: #fff; border-color: #ffffff44 }
+
+    /* Barra VTurb (grossa, responsiva) */
+    .pc-progress {
+      position: absolute; left: 0; right: 0; bottom: 0; z-index: 5;
+      height: 8px; background: rgba(255,255,255,.12);
+      box-shadow: 0 0 8px rgba(255,106,0,.5);
+      pointer-events: none;
+    }
+    .pc-progress span {
+      display: block; height: 100%; width: 0%;
+      background: linear-gradient(90deg, #ff6a00, #ffb347);
+      transition: width .18s ease-out;
+    }
+
+    /* ====== CTA opcional (placeholder, pode remover) ====== */
+    .pc-cta {
+      margin: 18px 0 10px;
+      display: none; /* mude para block se quiser exibir agora */
+      text-align: center;
+    }
+    .pc-cta a {
+      display: inline-block; padding: 16px 22px;
+      background: #22C55E; color: #fff; text-decoration: none; font-weight: 900;
+      border-radius: 16px; font-size: clamp(18px, 4vw, 28px); line-height: 1.2;
+      box-shadow: 0 8px 26px rgba(34,197,94,.35);
+    }
+  </style>
+</head>
+<body>
+
+  <header class="pc-header pc-container">
+    <h1>PainControl</h1>
+    <div class="pc-sub">VSL com clique para som, retomada real e barra VTurb</div>
+  </header>
+
+  <main class="pc-container">
+    <!-- ====== BLOCO VSL 100% (Cloudflare HLS + retomada + capas reais) ====== -->
+    <section class="pc-vsl" id="vslBox">
+      <video id="vsl" playsinline webkit-playsinline preload="metadata"></video>
+
+      <!-- CAPA 1: GIF (capathumilai.gif) -->
+      <div class="pc-cover" id="cover">
+        <img src="capathumilai.gif" alt="Clique para ouvir">
       </div>
+
+      <!-- CAPA 2: PNG (capathumilaicontinuar.png) com botões -->
+      <div class="pc-resume" id="resume">
+        <div class="pc-actions">
+          <button class="pc-btn pc-btn-primary" id="btnContinue">▶ Continuar assistindo</button>
+          <button class="pc-btn pc-btn-ghost"   id="btnRestart">↻ Ver do início</button>
+        </div>
+      </div>
+
+      <!-- Barra VTurb -->
+      <div class="pc-progress"><span id="bar"></span></div>
+    </section>
+
+    <!-- CTA opcional (remova se não quiser) -->
+    <div class="pc-cta">
+      <a href="#" id="ctaLink">QUERO APROVEITAR AGORA</a>
     </div>
+  </main>
 
-    <!-- Barra de progresso estilo VTurb -->
-    <div class="progress"><span id="bar"></span></div>
-  </div>
-</div>
+  <script>
+    /************* CONFIG *************/
+    const VIDEO_ID     = '10d249a46e42039201d0fec47f6d1f5b';
+    const CUSTOMER_SUB = 'customer-b2gdb94hrid04n5r.cloudflarestream.com';
+    const HLS_SRC      = `https://${CUSTOMER_SUB}/${VIDEO_ID}/manifest/video.m3u8`;
+    const RESUME_KEY   = `vsl:${VIDEO_ID}:time`;
+    const OFFER_AFTER  = 15;   // oferece “Continuar” após 15s assistidos
+    /**********************************/
 
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-<script>
-  const VIDEO_ID = '10d249a46e42039201d0fec47f6d1f5b';
-  const CUSTOMER_SUB = 'customer-b2gdb94hrid04n5r.cloudflarestream.com';
-  const HLS_SRC = `https://${CUSTOMER_SUB}/${VIDEO_ID}/manifest/video.m3u8`;
-  const RESUME_KEY = `vsl:${VIDEO_ID}:time`;
-  const OFFER_AFTER = 15;
+    const video       = document.getElementById('vsl');
+    const cover       = document.getElementById('cover');
+    const resume      = document.getElementById('resume');
+    const btnContinue = document.getElementById('btnContinue');
+    const btnRestart  = document.getElementById('btnRestart');
+    const bar         = document.getElementById('bar');
 
-  const video = document.getElementById('vsl');
-  const cover = document.getElementById('cover');
-  const resume = document.getElementById('resume');
-  const btnContinue = document.getElementById('btnContinue');
-  const btnRestart = document.getElementById('btnRestart');
-  const bar = document.getElementById('bar');
+    // helpers
+    const getSaved  = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
+    const saveTime  = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
+    const clearTime = () => localStorage.removeItem(RESUME_KEY);
 
-  const getSaved = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
-  const saveTime = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
-  const clearTime = () => localStorage.removeItem(RESUME_KEY);
+    // Carrega HLS e inicia no ponto desejado (chamar dentro de gesto de usuário)
+    function loadAndPlay(startSec){
+      const startAt = Math.max(0, Number(startSec)||0);
 
-  function loadAndPlay(startSec){
-    const startAt = Math.max(0, Number(startSec)||0);
-    function setStartAndPlay(){
-      const go = () => {
-        try { video.currentTime = startAt; } catch(_) {}
-        video.muted = false;
-        video.play().catch(()=>{});
-      };
-      if (video.readyState >= 1) { go(); }
-      else video.addEventListener('loadedmetadata', go, { once:true });
+      function setStartAndPlay(){
+        const go = () => {
+          try { video.currentTime = startAt; } catch(_) {}
+          video.muted = false;           // libera áudio
+          video.play().catch(()=>{});    // browsers antigos podem exigir 2º toque, mas normalmente ok
+        };
+        if (video.readyState >= 1) { go(); }
+        else video.addEventListener('loadedmetadata', go, { once:true });
+      }
+
+      if (window.Hls && Hls.isSupported()){
+        const hls = new Hls({ lowLatencyMode:false });
+        hls.loadSource(HLS_SRC);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, setStartAndPlay);
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')){
+        // Safari iOS/macOS toca HLS nativo
+        video.src = HLS_SRC;
+        setStartAndPlay();
+      } else {
+        // fallback
+        video.src = HLS_SRC;
+        setStartAndPlay();
+      }
     }
-    if (Hls.isSupported()){
-      const hls = new Hls({lowLatencyMode:false});
-      hls.loadSource(HLS_SRC);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, setStartAndPlay);
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')){
-      video.src = HLS_SRC;
-      setStartAndPlay();
-    } else {
-      video.src = HLS_SRC;
-      setStartAndPlay();
-    }
-  }
 
-  (function init(){
-    const s = getSaved();
-    if (s >= OFFER_AFTER){
-      cover.classList.add('hide');
-      resume.classList.add('show');
-    } else {
-      resume.classList.remove('show');
-      cover.classList.remove('hide');
-    }
-  })();
+    // Decide capa ao carregar
+    (function init(){
+      const s = getSaved();
+      if (s >= OFFER_AFTER){
+        cover.classList.add('pc-hide');
+        resume.classList.add('pc-show');
+      } else {
+        resume.classList.remove('pc-show');
+        cover.classList.remove('pc-hide');
+      }
+    })();
 
-  cover.addEventListener('click', ()=>{
-    cover.classList.add('hide');
-    resume.classList.remove('show');
-    loadAndPlay(0);
-  }, {once:true});
+    // Capa GIF → iniciar do zero
+    cover.addEventListener('click', ()=>{
+      cover.classList.add('pc-hide');
+      resume.classList.remove('pc-show');
+      loadAndPlay(0);
+    }, { once:true });
 
-  btnContinue.addEventListener('click', ()=>{
-    resume.classList.remove('show');
-    loadAndPlay(getSaved());
-  });
-  btnRestart.addEventListener('click', ()=>{
-    clearTime();
-    resume.classList.remove('show');
-    loadAndPlay(0);
-  });
+    // Capa PNG → continuar/reiniciar
+    btnContinue.addEventListener('click', ()=>{
+      resume.classList.remove('pc-show');
+      loadAndPlay(getSaved());
+    });
+    btnRestart.addEventListener('click', ()=>{
+      clearTime();
+      resume.classList.remove('pc-show');
+      loadAndPlay(0);
+    });
 
-  video.addEventListener('timeupdate', ()=>{
-    const t = Number(video.currentTime)||0;
-    const d = Number(video.duration)||1;
-    bar.style.width = Math.min(100, (t/d)*100).toFixed(2) + '%';
-    if (!video.paused) saveTime(t);
-  });
+    // Barra + salvamento com tempo real
+    video.addEventListener('timeupdate', ()=>{
+      const t = Number(video.currentTime)||0;
+      const d = Number(video.duration)||1;
+      bar.style.width = Math.min(100, (t/d)*100).toFixed(2) + '%';
+      if (!video.paused) saveTime(t);
+    });
 
-  video.addEventListener('ended', ()=>{
-    bar.style.width = '100%';
-    clearTime();
-  });
+    video.addEventListener('ended', ()=>{
+      bar.style.width = '100%';
+      clearTime();
+    });
 
-  window.addEventListener('beforeunload', ()=>{
-    saveTime(Number(video.currentTime)||0);
-  });
-</script>
-
-<style>
-  :root{ --brand:#ff6a00; --bg:#000; --fg:#fff; }
-  .wrap{ width:min(100%,900px); margin:auto }
-  .vsl{ position:relative; width:100%; padding-top:177.7777%; border-radius:16px; overflow:hidden; background:#000; }
-  video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; background:#000; }
-  .cover{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transition:opacity .25s; z-index:10; }
-  .cover.hide{ opacity:0; pointer-events:none }
-  .cover img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
-  .resume{ position:absolute; inset:0; display:none; background:url('capathumilaicontinuar.png') center/cover no-repeat #000; z-index:11; }
-  .resume.show{ display:block }
-  .actions{ position:absolute; bottom:8%; left:0; right:0; display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
-  .btn{ padding:12px 18px; border-radius:999px; font-weight:800; font-size:18px; cursor:pointer; border:2px solid transparent; }
-  .btn-primary{ background:var(--brand); color:#000 }
-  .btn-ghost{ background:#00000088; color:#fff; border-color:#ffffff44 }
-  .progress{ position:absolute; left:0; right:0; bottom:0; height:8px; background:rgba(255,255,255,.12); }
-  .progress span{ display:block; height:100%; width:0%; background:linear-gradient(90deg,#ff6a00,#ffb347); transition:width .18s; }
-</style>
+    window.addEventListener('beforeunload', ()=>{
+      saveTime(Number(video.currentTime)||0);
+    });
+  </script>
+</body>
+</html>
