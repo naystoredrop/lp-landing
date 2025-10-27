@@ -15,18 +15,19 @@
     }
     .wrap{ width:min(100%,900px); margin:auto }
 
-    /* Player 9:16 (vertical) */
+    /* Player 9:16 (vertical) como no seu snippet */
     #vsl-box{
       position:relative; width:100%;
-      padding-top:177.7777777778%;  /* 9:16 vertical */
+      padding-top:177.7777777778%; /* 9:16 */
       border-radius:16px; overflow:hidden; background:#000;
       box-shadow:0 10px 40px rgba(0,0,0,.5);
     }
     #vsl-box iframe{
       border:none; position:absolute; top:0; left:0; width:100%; height:100%;
+      display:block;
     }
 
-    /* CAPA GIF */
+    /* Capa GIF */
     .cover{
       position:absolute; inset:0; z-index:10;
       display:flex; align-items:center; justify-content:center;
@@ -34,74 +35,145 @@
     }
     .cover.hide{ opacity:0; pointer-events:none }
     .cover img{
-      width:100%; height:100%; object-fit:cover;
+      width:100%; height:100%; object-fit:cover; display:block; cursor:pointer;
       user-select:none; -webkit-user-drag:none;
-      cursor:pointer;
     }
 
-    /* Barra estilo VTurb */
+    /* Barra VTurb */
     .progress{
-      position:absolute; left:0; right:0; bottom:0;
+      position:absolute; left:0; right:0; bottom:0; z-index:5;
       height:8px; background:rgba(255,255,255,.12);
-      z-index:5; box-shadow:0 0 8px rgba(255,106,0,.5);
+      box-shadow:0 0 8px rgba(255,106,0,.5);
+      pointer-events:none;
     }
     .progress span{
       display:block; height:100%; width:0%;
       background:linear-gradient(90deg,#ff6a00,#ffb347);
-      transition:width .25s ease-out;
+      transition:width .22s ease-out;
     }
+
+    /* Modal Retomar (sem imagem) */
+    .resume{
+      position:absolute; inset:0; z-index:11; display:none;
+      align-items:center; justify-content:center; padding:16px;
+      background:linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.9));
+    }
+    .resume.show{display:flex}
+    .card{
+      width:min(92vw,520px); background:#111; color:#fff; border:1px solid #ffffff22;
+      border-radius:18px; padding:22px; text-align:center; box-shadow:0 12px 32px rgba(0,0,0,.4);
+    }
+    .card h2{ margin:0 0 10px; font-size:clamp(20px,3.5vw,30px) }
+    .actions{ display:flex; gap:12px; justify-content:center; margin-top:14px; flex-wrap:wrap }
+    .btn{
+      padding:12px 18px; border-radius:999px; border:2px solid transparent;
+      font-weight:800; font-size:16px; cursor:pointer;
+    }
+    .btn-primary{ background:var(--brand); color:#000 }
+    .btn-ghost{ background:#00000066; color:#fff; border-color:#ffffff33 }
+
+    /* Botão flutuante Anti-mudo */
+    .unmute{
+      position:absolute; right:12px; top:12px; z-index:12;
+      background:#111; color:#fff; border:2px solid #ffffff44;
+      padding:8px 12px; border-radius:999px; font-weight:800; font-size:14px;
+      display:none; align-items:center; gap:8px; cursor:pointer;
+    }
+    .unmute.show{display:inline-flex}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div id="vsl-box">
-      <!-- CAPA (ativa o som) -->
+      <!-- CAPA (clique = libera áudio e injeta o player) -->
       <div class="cover" id="cover">
         <img src="capa%20thumilai.gif" alt="Haz clic para escuchar">
       </div>
 
-      <!-- Barra de progresso -->
+      <!-- Modal Retomar -->
+      <div class="resume" id="resume">
+        <div class="card">
+          <h2>Ya comenzaste a ver este video.</h2>
+          <p>¿Quieres continuar donde paraste o ver desde el inicio?</p>
+          <div class="actions">
+            <button class="btn btn-primary" id="btnContinue">▶ Continuar viendo</button>
+            <button class="btn btn-ghost" id="btnRestart">↻ Ver desde el inicio</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botão anti-mudo (fallback) -->
+      <button class="unmute" id="unmuteBtn">🔊 Ativar áudio</button>
+
+      <!-- Barra -->
       <div class="progress"><span id="bar"></span></div>
     </div>
   </div>
 
   <script>
-    // CONFIGURAÇÃO
+    /************* CONFIG *************/
     const VIDEO_ID = '10d249a46e42039201d0fec47f6d1f5b';
-    const VIDEO_DURATION = 4511; // 1h15m11s (em segundos)
+    const VIDEO_DURATION = 4511;                 // 1:15:11 em segundos
+    const RESUME_KEY = `vsl:${VIDEO_ID}:time`;
+    const OFFER_AFTER = 15;                      // oferecer retomada após 15s assistidos
+    /**********************************/
+
     const box = document.getElementById('vsl-box');
     const cover = document.getElementById('cover');
+    const resume = document.getElementById('resume');
+    const btnContinue = document.getElementById('btnContinue');
+    const btnRestart = document.getElementById('btnRestart');
+    const unmuteBtn = document.getElementById('unmuteBtn');
     const bar = document.getElementById('bar');
 
-    // Link Cloudflare Stream direto (iframe que funciona)
-    const IFRAME_SRC =
-      "https://customer-b2gdb94hrid04n5r.cloudflarestream.com/" + VIDEO_ID +
-      "/iframe?autoplay=true&controls=false&playsinline=true&muted=false" +
-      "&poster=" + encodeURIComponent(
-        "https://customer-b2gdb94hrid04n5r.cloudflarestream.com/" +
-        VIDEO_ID + "/thumbnails/thumbnail.jpg?time=&height=600"
-      );
-
-    // Injetar o iframe
-    function injectIframe(){
-      const old = box.querySelector('iframe');
-      if(old) old.remove();
-      const iframe = document.createElement('iframe');
-      iframe.src = IFRAME_SRC;
-      iframe.allow = "accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;";
-      iframe.allowFullscreen = true;
-      iframe.loading = "lazy";
-      iframe.style.cssText = "border:none; position:absolute; top:0; left:0; width:100%; height:100%;";
-      box.appendChild(iframe);
+    // Base do iframe — com tudo que ajuda som + iOS
+    function iframeSrc(startSec, withControls=false){
+      const base = `https://customer-b2gdb94hrid04n5r.cloudflarestream.com/${VIDEO_ID}/iframe`;
+      const poster = encodeURIComponent(`https://customer-b2gdb94hrid04n5r.cloudflarestream.com/${VIDEO_ID}/thumbnails/thumbnail.jpg?time=&height=600`);
+      const params = [
+        'autoplay=1',
+        'playsinline=1',
+        'muted=0',
+        'preload=auto',
+        `controls=${withControls?1:0}`,
+        `poster=${poster}`
+      ].join('&');
+      const t = Math.max(0, Math.floor(startSec||0));
+      return `${base}?${params}#t=${t}`;
     }
 
-    // Barra VTurb — responsiva e viva
+    const getSaved = () => Number(localStorage.getItem(RESUME_KEY)) || 0;
+    const saveTime = (t) => localStorage.setItem(RESUME_KEY, String(Math.max(0, Math.floor(t||0))));
+    const clearTime = () => localStorage.removeItem(RESUME_KEY);
+
+    // injeta (ou reinjeta) o iframe
+    function mount(startSec, withControls=false){
+      // remove iframe antigo
+      const old = box.querySelector('iframe');
+      if (old) old.remove();
+
+      const iframe = document.createElement('iframe');
+      iframe.src = iframeSrc(startSec, withControls);
+      // permissões máximas p/ áudio
+      iframe.allow = "autoplay *; fullscreen *; encrypted-media *; picture-in-picture *; accelerometer *; gyroscope *";
+      iframe.allowFullscreen = true;
+      iframe.loading = "eager"; // segura menos lazy quando há clique
+      iframe.style.cssText = "border:none; position:absolute; top:0; left:0; width:100%; height:100%;";
+      box.appendChild(iframe);
+
+      // começa barra visual e salvamento do tempo
+      startProgress(startSec);
+    }
+
+    // barra VTurb
     let anim=null;
-    function startBar(){
+    function startProgress(fromSec){
       cancelAnimationFrame(anim);
+      const start = Math.max(0, Number(fromSec)||0);
       const t0 = performance.now();
       function frame(now){
-        const elapsed = (now - t0)/1000;
+        const elapsed = (now - t0)/1000 + start;
+        saveTime(elapsed);
         const n = Math.min(elapsed / VIDEO_DURATION, 1);
         const eased = Math.pow(n, 1/1.8);
         bar.style.width = (eased*100).toFixed(2) + "%";
@@ -110,15 +182,62 @@
       anim=requestAnimationFrame(frame);
     }
 
-    // Clique na capa → libera áudio e inicia vídeo
-    function startVideo(){
-      cover.classList.add('hide');
-      injectIframe();
-      startBar();
-    }
+    // Decide se oferece retomada
+    (function init(){
+      const saved = getSaved();
+      if (saved >= OFFER_AFTER && saved < VIDEO_DURATION - 5){
+        resume.classList.add('show');
+        cover.classList.add('hide');
+      } else {
+        resume.classList.remove('show');
+        cover.classList.remove('hide');
+      }
+    })();
 
-    cover.addEventListener('click', startVideo, {once:true});
-    cover.addEventListener('touchstart', startVideo, {once:true, passive:true});
+    // CLICOU NA CAPA → tenta com som direto
+    cover.addEventListener('click', ()=>{
+      cover.classList.add('hide');
+      resume.classList.remove('show');
+      // tentativa 1: sem controles, som direto
+      mount(0, false);
+      // timeout de verificação: se o browser ainda silenciar, mostra botão "Ativar áudio"
+      // (não dá pra detectar som no cross-origin; oferecemos o fallback sempre por segurança)
+      setTimeout(()=>{ unmuteBtn.classList.add('show'); }, 600);
+    }, {once:true});
+
+    // RETOMAR
+    btnContinue.addEventListener('click', ()=>{
+      resume.classList.remove('show');
+      mount(getSaved(), false);
+      setTimeout(()=>{ unmuteBtn.classList.add('show'); }, 600);
+    });
+
+    // REINICIAR
+    btnRestart.addEventListener('click', ()=>{
+      clearTime();
+      resume.classList.remove('show');
+      mount(0, false);
+      setTimeout(()=>{ unmuteBtn.classList.add('show'); }, 600);
+    });
+
+    // Fallback anti-mudo:
+    // Alguns navegadores exigem interação DENTRO do iframe; então reinjetamos com controls=1.
+    // A pessoa dá 1 toque no play/volume, o áudio fica liberado e você pode deixar assim
+    // ou reinjetar sem controles (opcional).
+    unmuteBtn.addEventListener('click', ()=>{
+      const s = getSaved();
+      mount(s, true);          // reinjeta com controles pra tocar com som
+      unmuteBtn.classList.remove('show');
+    });
+
+    // Zera progresso quando atingir a duração total (failsafe)
+    setInterval(()=>{
+      const t = getSaved();
+      if(t >= VIDEO_DURATION - 1){
+        clearTime();
+        bar.style.width = '100%';
+      }
+    }, 1000);
   </script>
 </body>
 </html>
